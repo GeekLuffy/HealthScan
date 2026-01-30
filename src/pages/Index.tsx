@@ -32,16 +32,6 @@ const Index = () => {
 
   const labs = [
     {
-      id: 'motor',
-      title: 'Motor & Tremor Lab',
-      description: 'Measure movement patterns, tremor frequency, and motor control',
-      targetCondition: "Parkinson's & Movement Disorders",
-      icon: Activity,
-      status: 'ready',
-      features: ['Finger Tapping', 'Tremor Analysis', 'Movement Speed'],
-      color: 'blue'
-    },
-    {
       id: 'voice',
       title: 'Voice & Speech Lab',
       description: 'Analyze vocal patterns, pitch stability, and speech characteristics',
@@ -60,6 +50,16 @@ const Index = () => {
       status: 'ready',
       features: ['Saccade Tests', 'Reaction Time', 'Stroop Test'],
       color: 'orange'
+    },
+    {
+      id: 'motor',
+      title: 'Motor & Tremor Lab',
+      description: 'Measure movement patterns, tremor frequency, and motor control',
+      targetCondition: "Parkinson's & Movement Disorders",
+      icon: Activity,
+      status: 'ready',
+      features: ['Finger Tapping', 'Tremor Analysis', 'Movement Speed'],
+      color: 'blue'
     },
     {
       id: 'mental-health',

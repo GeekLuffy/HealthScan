@@ -162,9 +162,9 @@ const About: React.FC = () => {
               <CardContent className="p-8">
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                   {[
-                    { icon: Activity, label: "Motor & Tremor Lab", desc: "Parkinson's screening (91% accuracy)", color: "text-blue-400" },
                     { icon: Mic, label: "Voice & Speech Lab", desc: "Voice pattern analysis (89% accuracy)", color: "text-purple-400" },
                     { icon: Eye, label: "Eye & Cognition Lab", desc: "Alzheimer's screening (87% accuracy)", color: "text-green-400" },
+                    { icon: Activity, label: "Motor & Tremor Lab", desc: "Parkinson's screening (91% accuracy)", color: "text-blue-400" },
                     { icon: Heart, label: "Cardiovascular Lab", desc: "Heart health monitoring (94% accuracy)", color: "text-red-400" },
                     { icon: Brain, label: "Mental Health Lab", desc: "Depression/anxiety screening (95% accuracy)", color: "text-indigo-400" },
                     { icon: Ear, label: "Vision & Hearing Lab", desc: "Sensory health assessment", color: "text-orange-400" },
