@@ -1,6 +1,6 @@
 // MotorLabWithReport_Fixed.tsx
 import React, { useEffect, useRef, useState } from "react";
-import { HandLandmarker, FilesetResolver, DrawingUtils} from "@mediapipe/tasks-vision";
+import { HandLandmarker, FilesetResolver, DrawingUtils } from "@mediapipe/tasks-vision";
 import { HAND_CONNECTIONS } from "@mediapipe/hands";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,11 +79,11 @@ interface MotorCharacteristics {
 
 // Advanced clinical analysis functions
 function generateMotorClinicalFindings(
-  fingerTaps: number, 
-  testDuration: number, 
-  tapRate: number, 
-  coordinationScore: number, 
-  tremorFrequency: number, 
+  fingerTaps: number,
+  testDuration: number,
+  tapRate: number,
+  coordinationScore: number,
+  tremorFrequency: number,
   tremorAmplitude: number
 ): ClinicalFinding[] {
   const findings: ClinicalFinding[] = [];
@@ -95,11 +95,11 @@ function generateMotorClinicalFindings(
     value: `${tapRate.toFixed(2)} taps/sec (${fingerTaps} taps in ${testDuration.toFixed(1)}s)`,
     normalRange: '5-10 taps/sec (healthy adults)',
     status: tapRateStatus,
-    clinicalSignificance: tapRateStatus === 'abnormal' 
+    clinicalSignificance: tapRateStatus === 'abnormal'
       ? 'Significantly reduced tapping rate may indicate bradykinesia or motor slowing associated with neurological conditions'
       : tapRateStatus === 'borderline'
-      ? 'Mildly reduced tapping rate that may warrant monitoring for early motor changes'
-      : 'Normal finger tapping rate indicating adequate motor speed and dexterity'
+        ? 'Mildly reduced tapping rate that may warrant monitoring for early motor changes'
+        : 'Normal finger tapping rate indicating adequate motor speed and dexterity'
   });
 
   // Coordination Score Analysis
@@ -112,8 +112,8 @@ function generateMotorClinicalFindings(
     clinicalSignificance: coordStatus === 'abnormal'
       ? 'Poor coordination may indicate cerebellar dysfunction or motor control difficulties'
       : coordStatus === 'borderline'
-      ? 'Mild coordination impairment that may indicate early motor changes'
-      : 'Excellent motor coordination suggesting intact cerebellar and motor cortex function'
+        ? 'Mild coordination impairment that may indicate early motor changes'
+        : 'Excellent motor coordination suggesting intact cerebellar and motor cortex function'
   });
 
   // Tremor Analysis
@@ -127,8 +127,8 @@ function generateMotorClinicalFindings(
       clinicalSignificance: tremorStatus === 'abnormal'
         ? 'Tremor frequency in pathological range (4-12 Hz) may indicate Parkinson\'s disease or essential tremor'
         : tremorStatus === 'borderline'
-        ? 'High frequency tremor may indicate anxiety or caffeine-induced physiological tremor'
-        : 'Tremor within normal physiological range'
+          ? 'High frequency tremor may indicate anxiety or caffeine-induced physiological tremor'
+          : 'Tremor within normal physiological range'
     });
   }
 
@@ -136,9 +136,9 @@ function generateMotorClinicalFindings(
 }
 
 function assessMotorDiseaseRisk(
-  tapRate: number, 
-  coordinationScore: number, 
-  tremorFrequency: number, 
+  tapRate: number,
+  coordinationScore: number,
+  tremorFrequency: number,
   tremorAmplitude: number,
   tapIntervals: number[]
 ): MotorDiseaseRiskAssessment {
@@ -267,9 +267,9 @@ function assessMotorDiseaseRisk(
 }
 
 function analyzeMotorCharacteristics(
-  tapRate: number, 
-  coordinationScore: number, 
-  tremorFrequency: number, 
+  tapRate: number,
+  coordinationScore: number,
+  tremorFrequency: number,
   tremorAmplitude: number,
   tapIntervals: number[]
 ): MotorCharacteristics {
@@ -298,7 +298,7 @@ function analyzeMotorCharacteristics(
     const intervalStats = robustStatistics(tapIntervals, true);
     rhythmVariability = intervalStats.stdDev; // Use robust standard deviation
   }
-  
+
   let rhythmicity: 'regular' | 'irregular' | 'variable' = 'regular';
   if (rhythmVariability > 300) rhythmicity = 'irregular';
   else if (rhythmVariability > 150) rhythmicity = 'variable';
@@ -321,8 +321,8 @@ function analyzeMotorCharacteristics(
 }
 
 function generateMotorRecommendations(
-  diseaseRisk: MotorDiseaseRiskAssessment, 
-  motorCharacteristics: MotorCharacteristics, 
+  diseaseRisk: MotorDiseaseRiskAssessment,
+  motorCharacteristics: MotorCharacteristics,
   clinicalFindings: ClinicalFinding[]
 ): string[] {
   const recommendations: string[] = [];
@@ -374,7 +374,7 @@ function generateMotorRecommendations(
   if (motorCharacteristics.movementSpeed === 'bradykinetic') {
     recommendations.push('Focus on large amplitude, high-intensity exercises (LSVT BIG protocol)');
   }
-  
+
   if (motorCharacteristics.coordinationLevel === 'poor') {
     recommendations.push('Implement targeted coordination and dexterity training exercises');
   }
@@ -408,7 +408,7 @@ export const MotorLab: React.FC = () => {
   const [tapDetectedFrame, setTapDetectedFrame] = useState(false);
   const [tremorSamples, setTremorSamples] = useState<TremorSample[]>([]);
   const [analysisResults, setAnalysisResults] = useState<MotorAnalysisResults | null>(null);
-  
+
   // Ref for the report section to enable auto-scroll
   const reportRef = useRef<HTMLDivElement>(null);
 
@@ -416,8 +416,8 @@ export const MotorLab: React.FC = () => {
   useEffect(() => {
     if (analysisResults && reportRef.current) {
       setTimeout(() => {
-        reportRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
+        reportRef.current?.scrollIntoView({
+          behavior: 'smooth',
           block: 'start',
           inline: 'nearest'
         });
@@ -474,7 +474,7 @@ export const MotorLab: React.FC = () => {
   // --- Camera init ---
   async function initCamera() {
     if (!videoRef.current) return;
-    
+
     // Check if mediaDevices is available
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       console.error("Camera API not available");
@@ -482,7 +482,7 @@ export const MotorLab: React.FC = () => {
       setStatus("Camera API not available. Please use HTTPS or a modern browser.");
       return;
     }
-    
+
     try {
       setStatus("Requesting camera permission...");
       const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
@@ -498,7 +498,7 @@ export const MotorLab: React.FC = () => {
     } catch (err) {
       console.error("Camera error:", err);
       setPermission("denied");
-      
+
       // Provide more specific error messages
       if (err instanceof Error) {
         if (err.name === 'NotAllowedError') {
@@ -535,11 +535,11 @@ export const MotorLab: React.FC = () => {
       setTestDuration(prev => {
         const next = +(prev + 0.1).toFixed(1);
         testDurationRef.current = next;
-        if (next >= 5) { 
+        if (next >= 5) {
           // Ensure we set the final duration before stopping
           testDurationRef.current = 5.0;
-          stopTest(); 
-          return 5; 
+          stopTest();
+          return 5;
         }
         return next;
       });
@@ -554,12 +554,12 @@ export const MotorLab: React.FC = () => {
 
   function generateAnalysis() {
     setStatus("Processing motor data and generating advanced clinical analysis...");
-    
+
     // Generate comprehensive analysis results
     setTimeout(() => {
       // Use the exact same metrics that the live display is showing
       const { tapRate, coordinationScore, tremorMetrics, movementQuality } = liveMetricsRef.current;
-      
+
       console.log('Analysis using live metrics:', {
         fingerTaps,
         testDuration,
@@ -567,7 +567,7 @@ export const MotorLab: React.FC = () => {
         tremorSamplesCount: tremorSamplesRef.current.length,
         tapIntervalsCount: tapIntervals.length
       });
-      
+
       // Create comprehensive analysis results using live display values
       const results: MotorAnalysisResults = {
         timestamp: new Date().toISOString(),
@@ -594,14 +594,14 @@ export const MotorLab: React.FC = () => {
         },
         recommendations: []
       };
-      
+
       // Validate data quality and improve accuracy
       const tapIntervalQuality = validateDataQuality(tapIntervals, 5, 40);
       const tremorYValues = tremorSamplesRef.current.map(s => s.y);
-      const tremorQuality = tremorYValues.length > 0 
+      const tremorQuality = tremorYValues.length > 0
         ? validateDataQuality(tremorYValues, 10, 50)
         : { isValid: false, qualityScore: 0, issues: ['No tremor data'], sampleCount: 0, cv: 0 };
-      
+
       // Use robust statistics for tap intervals
       let improvedTapRate = tapRate;
       let improvedCoordinationScore = coordinationScore;
@@ -615,11 +615,11 @@ export const MotorLab: React.FC = () => {
         const intervalAccuracyScore = calculateAccuracyScore(intervalStats, tapIntervalQuality);
         improvedCoordinationScore = Math.min(100, coordinationScore + (intervalAccuracyScore - 70) * 0.3);
       }
-      
+
       // Use improved metrics for analysis
       const finalTapRate = improvedTapRate;
       const finalCoordinationScore = Math.max(0, Math.min(100, improvedCoordinationScore));
-      
+
       // Generate advanced clinical analysis using improved values
       results.clinicalFindings = generateMotorClinicalFindings(
         fingerTaps, testDuration, finalTapRate, finalCoordinationScore, tremorMetrics.freqHz, tremorMetrics.ampNorm
@@ -633,13 +633,13 @@ export const MotorLab: React.FC = () => {
       results.recommendations = generateMotorRecommendations(
         results.diseaseRiskAssessment, results.motorCharacteristics, results.clinicalFindings
       );
-      
+
       // Update results with improved metrics
       results.tapRate = finalTapRate;
       results.coordinationScore = finalCoordinationScore;
-      
+
       // Improve quality score based on data quality
-      const tapAccuracyScore = tapIntervals.length >= 5 
+      const tapAccuracyScore = tapIntervals.length >= 5
         ? calculateAccuracyScore(robustStatistics(tapIntervals, true), tapIntervalQuality)
         : 70;
       const tremorAccuracyScore = tremorQuality.sampleCount >= 10
@@ -647,10 +647,10 @@ export const MotorLab: React.FC = () => {
         : 70;
       const combinedAccuracyScore = (tapAccuracyScore * 0.6) + (tremorAccuracyScore * 0.4);
       results.qualityScore = Math.max(0, Math.min(100, (movementQuality * 0.7) + (combinedAccuracyScore * 0.3)));
-      
+
       setAnalysisResults(results);
       setStatus("Analysis complete! View your detailed motor assessment report below.");
-      
+
       // Save to unified health data storage
       try {
         const healthTestResult: HealthTestResult = {
@@ -682,7 +682,7 @@ export const MotorLab: React.FC = () => {
     isRecordingRef.current = false;
     if (timerRef.current) { window.clearInterval(timerRef.current); timerRef.current = null; }
     setStatus("Test complete. Analyzing data and generating comprehensive report...");
-    
+
     // Wait longer for all state updates to complete and UI to refresh
     setTimeout(() => {
       generateAnalysis();
@@ -710,130 +710,130 @@ export const MotorLab: React.FC = () => {
   }
 
   // --- Prediction/render loop ---
-function predictWebcam() {
-  const video = videoRef.current;
-  const canvas = canvasRef.current;
-  if (!video || !canvas || !globalHandLandmarker) {
-    requestAnimationFrame(predictWebcam);
-    return;
-  }
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    requestAnimationFrame(predictWebcam);
-    return;
-  }
-  if (video.videoWidth === 0 || video.videoHeight === 0) {
-    requestAnimationFrame(predictWebcam);
-    return;
-  }
-  if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-  }
+  function predictWebcam() {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas || !globalHandLandmarker) {
+      requestAnimationFrame(predictWebcam);
+      return;
+    }
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      requestAnimationFrame(predictWebcam);
+      return;
+    }
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      requestAnimationFrame(predictWebcam);
+      return;
+    }
+    if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+    }
 
-  // 👇 ADD THIS LINE to create an instance of DrawingUtils
-  const drawingUtils = new DrawingUtils(ctx);
+    // 👇 ADD THIS LINE to create an instance of DrawingUtils
+    const drawingUtils = new DrawingUtils(ctx);
 
-  try {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+    try {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
 
-    if (isRecordingRef.current && video.currentTime !== globalLastVideoTime) {
-      globalLastVideoTime = video.currentTime;
-      const results = globalHandLandmarker.detectForVideo(video, performance.now());
-      const landmarksArray = results?.landmarks ?? [];
-      setHandsDetected(landmarksArray.length);
-      setTapDetectedFrame(false);
-      setLastDistancePx(null);
+      if (isRecordingRef.current && video.currentTime !== globalLastVideoTime) {
+        globalLastVideoTime = video.currentTime;
+        const results = globalHandLandmarker.detectForVideo(video, performance.now());
+        const landmarksArray = results?.landmarks ?? [];
+        setHandsDetected(landmarksArray.length);
+        setTapDetectedFrame(false);
+        setLastDistancePx(null);
 
-      if (landmarksArray.length > 0) {
-        let minDist = Infinity;
-        for (let i = 0; i < landmarksArray.length; i++) {
-          const lm = landmarksArray[i];
+        if (landmarksArray.length > 0) {
+          let minDist = Infinity;
+          for (let i = 0; i < landmarksArray.length; i++) {
+            const lm = landmarksArray[i];
 
-          drawingUtils.drawLandmarks(lm, {
-            color: "#FF0000",
-            lineWidth: 2,
-            radius: 5,
-          });
-          const connections: { start: number; end: number }[] =
-            HAND_CONNECTIONS.map(([start, end]) => ({ start, end }));
+            drawingUtils.drawLandmarks(lm, {
+              color: "#FF0000",
+              lineWidth: 2,
+              radius: 5,
+            });
+            const connections: { start: number; end: number }[] =
+              HAND_CONNECTIONS.map(([start, end]) => ({ start, end }));
 
-          drawingUtils.drawConnectors(lm, connections, {
-            color: "#00FF00",
-            lineWidth: 5,
-          });
+            drawingUtils.drawConnectors(lm, connections, {
+              color: "#00FF00",
+              lineWidth: 5,
+            });
 
-          if (lm[8] && lm[4]) {
-            const x8 = lm[8].x * video.videoWidth, y8 = lm[8].y * video.videoHeight;
-            const x4 = lm[4].x * video.videoWidth, y4 = lm[4].y * video.videoHeight;
-            const d = Math.hypot(x8 - x4, y8 - y4);
-            if (d < minDist) minDist = d;
-            drawDot(ctx, x8, y8, "lime", `h${i} idx`);
-            drawDot(ctx, x4, y4, "orange", `h${i} thb`);
+            if (lm[8] && lm[4]) {
+              const x8 = lm[8].x * video.videoWidth, y8 = lm[8].y * video.videoHeight;
+              const x4 = lm[4].x * video.videoWidth, y4 = lm[4].y * video.videoHeight;
+              const d = Math.hypot(x8 - x4, y8 - y4);
+              if (d < minDist) minDist = d;
+              drawDot(ctx, x8, y8, "lime", `h${i} idx`);
+              drawDot(ctx, x4, y4, "orange", `h${i} thb`);
+            }
+
+            if (lm[0]) {
+              tremorSamplesRef.current.push({ t: Date.now(), y: lm[0].y * video.videoHeight });
+            }
           }
 
-          if (lm[0]) {
-            tremorSamplesRef.current.push({ t: Date.now(), y: lm[0].y * video.videoHeight });
-          }
-        }
-        
-        if (tremorSamplesRef.current.length > 300) tremorSamplesRef.current.splice(0, tremorSamplesRef.current.length - 300);
-        setTremorSamples([...tremorSamplesRef.current]);
+          if (tremorSamplesRef.current.length > 300) tremorSamplesRef.current.splice(0, tremorSamplesRef.current.length - 300);
+          setTremorSamples([...tremorSamplesRef.current]);
 
-        if (minDist !== Infinity) {
-          setLastDistancePx(Math.round(minDist));
-          const TAP_THRESHOLD_PX = Math.min(video.videoWidth, video.videoHeight) * thresholdFraction;
-          if (minDist < TAP_THRESHOLD_PX) {
-            setTapDetectedFrame(true);
-            registerTap();
+          if (minDist !== Infinity) {
+            setLastDistancePx(Math.round(minDist));
+            const TAP_THRESHOLD_PX = Math.min(video.videoWidth, video.videoHeight) * thresholdFraction;
+            if (minDist < TAP_THRESHOLD_PX) {
+              setTapDetectedFrame(true);
+              registerTap();
+            }
           }
         }
       }
+    } catch (err) {
+      console.error("Detection loop error:", err);
+      setStatus("Error running model: Please run this lab on localhost, because due to the DeepLearning requirements, it cannot be run on vercel.");
     }
-  } catch (err) {
-    console.error("Detection loop error:", err);
-    setStatus("Error running model: Please run this lab on localhost, because due to the DeepLearning requirements, it cannot be run on vercel.");
-  }
 
-  requestAnimationFrame(predictWebcam);
-}
+    requestAnimationFrame(predictWebcam);
+  }
 
   // --- Metrics ---
   function computeTremorMetrics(samples: TremorSample[]) {
     if (!videoRef.current || samples.length < 6) return { ampNorm: 0, freqHz: 0 };
     const ys = samples.map(s => s.y), ts = samples.map(s => s.t);
-    const n = ys.length, mean = ys.reduce((a,b)=>a+b,0)/n;
-    const std = Math.sqrt(ys.map(y=>(y-mean)**2).reduce((a,b)=>a+b,0)/n);
+    const n = ys.length, mean = ys.reduce((a, b) => a + b, 0) / n;
+    const std = Math.sqrt(ys.map(y => (y - mean) ** 2).reduce((a, b) => a + b, 0) / n);
     const ampNorm = std / videoRef.current.videoHeight;
-    const durationMs = ts[n-1]-ts[0];
+    const durationMs = ts[n - 1] - ts[0];
     if (durationMs <= 0) return { ampNorm, freqHz: 0 };
-    const fs = (n-1)/(durationMs/1000.0);
-    let bestK=-1,bestMag=0;
-    for(let k=1;k<=Math.floor(n/2);k++){let re=0,im=0;for(let j=0;j<n;j++){const angle=(-2*Math.PI*k*j)/n; re+=ys[j]*Math.cos(angle); im+=ys[j]*Math.sin(angle);} const mag=Math.sqrt(re*re+im*im); if(mag>bestMag){bestMag=mag;bestK=k;}}
-    const freqHz = bestK>0 ? (bestK*fs)/n : 0;
+    const fs = (n - 1) / (durationMs / 1000.0);
+    let bestK = -1, bestMag = 0;
+    for (let k = 1; k <= Math.floor(n / 2); k++) { let re = 0, im = 0; for (let j = 0; j < n; j++) { const angle = (-2 * Math.PI * k * j) / n; re += ys[j] * Math.cos(angle); im += ys[j] * Math.sin(angle); } const mag = Math.sqrt(re * re + im * im); if (mag > bestMag) { bestMag = mag; bestK = k; } }
+    const freqHz = bestK > 0 ? (bestK * fs) / n : 0;
     return { ampNorm, freqHz };
   }
 
   function computeCoordinationScore(intervals: number[]) {
     if (intervals.length <= 1) return 0;
-    const mean = intervals.reduce((a,b)=>a+b,0)/intervals.length;
-    if(mean===0) return 0;
-    const std = Math.sqrt(intervals.map(x=>(x-mean)**2).reduce((a,b)=>a+b,0)/intervals.length);
-    const cv = std/mean;
-    return Math.round(Math.max(0,Math.min(100,(1/(1+cv))*100)));
+    const mean = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+    if (mean === 0) return 0;
+    const std = Math.sqrt(intervals.map(x => (x - mean) ** 2).reduce((a, b) => a + b, 0) / intervals.length);
+    const cv = std / mean;
+    return Math.round(Math.max(0, Math.min(100, (1 / (1 + cv)) * 100)));
   }
 
-  function computeMovementQuality(coordination:number, tremorAmpNorm:number){
-    const tremorPenalty=Math.min(100,tremorAmpNorm*300*100)/100;
-    return Math.round(Math.max(0,Math.min(100,coordination*0.7+(100-tremorPenalty)*0.3)));
+  function computeMovementQuality(coordination: number, tremorAmpNorm: number) {
+    const tremorPenalty = Math.min(100, tremorAmpNorm * 300 * 100) / 100;
+    return Math.round(Math.max(0, Math.min(100, coordination * 0.7 + (100 - tremorPenalty) * 0.3)));
   }
 
   const tremorMetrics = computeTremorMetrics(tremorSamplesRef.current);
-  const tremorAmpPercent = tremorMetrics.ampNorm*100;
+  const tremorAmpPercent = tremorMetrics.ampNorm * 100;
   const coordinationScore = computeCoordinationScore(tapIntervals);
   const movementQuality = computeMovementQuality(coordinationScore, tremorMetrics.ampNorm);
-  const tapRate = testDuration>0 ? fingerTaps/testDuration : 0;
+  const tapRate = testDuration > 0 ? fingerTaps / testDuration : 0;
 
   // Store live metrics in ref for analysis to use
   liveMetricsRef.current = {
@@ -868,39 +868,39 @@ function predictWebcam() {
 
   function generateRecommendations(): string[] {
     const recommendations: string[] = [];
-    
+
     if (coordinationScore < 60) {
       recommendations.push("Consider coordination exercises like finger-to-nose movements");
       recommendations.push("Practice fine motor tasks such as writing or drawing");
     }
-    
+
     if (tremorMetrics.freqHz > 6) {
       recommendations.push("Monitor tremor patterns over time for changes");
       recommendations.push("Consider consultation with a neurologist");
       recommendations.push("Avoid caffeine before assessments as it may increase tremor");
     }
-    
+
     if (tapRate < 4) {
       recommendations.push("Practice rapid alternating movements to improve speed");
       recommendations.push("Consider occupational therapy evaluation");
     }
-    
+
     if (movementQuality < 70) {
       recommendations.push("Regular exercise may help improve overall motor function");
       recommendations.push("Consider tracking improvements over multiple sessions");
     }
-    
+
     if (recommendations.length === 0) {
       recommendations.push("Excellent motor function - maintain current activity level");
       recommendations.push("Consider periodic re-assessment to monitor any changes");
     }
-    
+
     return recommendations;
   }
 
   function getClinicalInsights(): { category: string; findings: string[]; significance: string }[] {
     const insights = [];
-    
+
     // Coordination Analysis
     insights.push({
       category: "Motor Coordination",
@@ -909,7 +909,7 @@ function predictWebcam() {
         `Tap consistency: ${tapIntervals.length > 1 ? 'Measured' : 'Insufficient data'}`,
         `Movement pattern: ${coordinationScore >= 70 ? 'Regular' : 'Irregular'}`
       ],
-      significance: coordinationScore >= 70 ? 
+      significance: coordinationScore >= 70 ?
         "Normal coordination patterns suggest intact motor control pathways." :
         "Irregular patterns may indicate motor control difficulties requiring attention."
     });
@@ -950,26 +950,27 @@ function predictWebcam() {
   const clinicalInsights = getClinicalInsights();
 
   return (
-    <div className="space-y-8 pt-24 bg-gradient-to-b from-blue-50 via-white to-green-50 min-h-screen pb-12">
+    <div className="space-y-8 pt-24 min-h-screen pb-12">
       {/* Header */}
-      <div className="text-center space-y-4 bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-600 max-w-4xl mx-auto">
+      <div className="text-center space-y-4 glass-panel p-8 max-w-4xl mx-auto rounded-3xl relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-1 h-full bg-primary/50"></div>
         <div className="flex items-center justify-center gap-3 mb-2">
-          <Activity className="w-8 h-8 text-blue-600" />
-          <h1 className="text-4xl font-bold text-gray-900">Motor & Tremor Lab</h1>
+          <Activity className="w-8 h-8 text-primary" />
+          <h1 className="text-4xl font-bold text-foreground">Motor & Tremor Lab</h1>
         </div>
-        <p className="text-lg text-gray-700">{status}</p>
-        <Badge className="bg-green-600 text-white mt-2">Real-time Analysis</Badge>
+        <p className="text-lg text-muted-foreground">{status}</p>
+        <Badge className="bg-green-500/20 text-green-400 border-green-500/20 mt-2">Real-time Analysis</Badge>
       </div>
 
       {/* Controls */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 max-w-4xl mx-auto px-4">
-        <div className="flex-1 text-center sm:text-left"><p className="text-sm text-gray-600">{status}</p></div>
+        <div className="flex-1 text-center sm:text-left"><p className="text-sm text-muted-foreground">{status}</p></div>
         <div className="flex gap-2">
-          <Button onClick={initCamera} variant="outline" className="border-gray-300 text-gray-700 hover:bg-blue-50 hover:border-blue-600">
-            <CameraIcon className="w-4 h-4 mr-2"/> Enable Camera
+          <Button onClick={initCamera} variant="outline" className="glass-hover border-white/10 text-foreground hover:bg-primary/10 hover:border-primary/30">
+            <CameraIcon className="w-4 h-4 mr-2" /> Enable Camera
           </Button>
-          <Button onClick={startTest} disabled={permission!=="granted"||isRecording} className="bg-blue-600 hover:bg-blue-700 text-white">
-            {isRecording ? `Testing... ${testDuration.toFixed(1)}s` : <><Play className="w-4 h-4 mr-2"/> Start 5s Test</>}
+          <Button onClick={startTest} disabled={permission !== "granted" || isRecording} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            {isRecording ? `Testing... ${testDuration.toFixed(1)}s` : <><Play className="w-4 h-4 mr-2" /> Start 5s Test</>}
           </Button>
         </div>
       </div>
@@ -977,67 +978,67 @@ function predictWebcam() {
       {/* Video + Metrics */}
       <div className="grid lg:grid-cols-2 gap-6 max-w-6xl mx-auto px-4">
         {/* Camera Feed */}
-        <Card className="bg-white shadow-md border-l-4 border-blue-600">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-white">
-            <CardTitle className="text-gray-900">Movement Capture</CardTitle>
-            <CardDescription className="text-gray-600">Visual + calibration</CardDescription>
+        <Card className="glass-panel border-0">
+          <CardHeader className="bg-white/5 border-b border-white/5">
+            <CardTitle className="text-foreground">Movement Capture</CardTitle>
+            <CardDescription className="text-muted-foreground">Visual + calibration</CardDescription>
           </CardHeader>
-          <CardContent className="bg-white">
-            <div className="relative bg-gray-100 rounded-lg overflow-hidden aspect-video border border-gray-200">
-              <video ref={videoRef} className="w-full h-full object-cover" muted playsInline autoPlay style={{ transform:"scaleX(-1)" }} />
-              <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ transform:"scaleX(-1)" }} />
+          <CardContent className="pt-6">
+            <div className="relative bg-black/40 rounded-lg overflow-hidden aspect-video border border-white/10">
+              <video ref={videoRef} className="w-full h-full object-cover" muted playsInline autoPlay style={{ transform: "scaleX(-1)" }} />
+              <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ transform: "scaleX(-1)" }} />
             </div>
-            <div className="mt-3 grid grid-cols-2 gap-3 text-sm text-gray-700">
-              <div>Hands detected: <strong className="text-blue-600">{handsDetected}</strong></div>
-              <div>Tap count: <strong className="text-blue-600">{fingerTaps}</strong></div>
-              <div>Last distance (px): <strong className="text-gray-900">{lastDistancePx??"-"}</strong></div>
-              <div>Tap rate: <strong className="text-green-600">{tapRate.toFixed(2)} taps/sec</strong></div>
-              <div className="col-span-2">Tap this frame: <strong className={tapDetectedFrame ? "text-green-600" : "text-gray-500"}>{tapDetectedFrame?"YES":"no"}</strong></div>
+            <div className="mt-3 grid grid-cols-2 gap-3 text-sm text-muted-foreground">
+              <div>Hands detected: <strong className="text-primary">{handsDetected}</strong></div>
+              <div>Tap count: <strong className="text-primary">{fingerTaps}</strong></div>
+              <div>Last distance (px): <strong className="text-foreground">{lastDistancePx ?? "-"}</strong></div>
+              <div>Tap rate: <strong className="text-green-400">{tapRate.toFixed(2)} taps/sec</strong></div>
+              <div className="col-span-2">Tap this frame: <strong className={tapDetectedFrame ? "text-green-400" : "text-muted-foreground"}>{tapDetectedFrame ? "YES" : "no"}</strong></div>
             </div>
           </CardContent>
         </Card>
 
         {/* Data Collection Status */}
-        <Card className="bg-white shadow-md border-l-4 border-green-600">
-          <CardHeader className="bg-gradient-to-r from-green-50 to-white">
-            <CardTitle className="text-gray-900">Data Collection Status</CardTitle>
-            <CardDescription className="text-gray-600">Real-time collection metrics</CardDescription>
+        <Card className="glass-panel border-0">
+          <CardHeader className="bg-white/5 border-b border-white/5">
+            <CardTitle className="text-foreground">Data Collection Status</CardTitle>
+            <CardDescription className="text-muted-foreground">Real-time collection metrics</CardDescription>
           </CardHeader>
-          <CardContent className="bg-white">
+          <CardContent className="pt-6">
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
-                <div><strong>Tremor Samples:</strong> <span className="text-blue-600 font-semibold">{tremorSamplesRef.current.length}</span></div>
-                <div><strong>Tap Intervals:</strong> <span className="text-blue-600 font-semibold">{tapIntervals.length}</span></div>
-                <div><strong>Test Duration:</strong> <span className="text-green-600 font-semibold">{testDuration.toFixed(1)}s</span></div>
-                <div><strong>Recording:</strong> <span className={isRecording ? "text-green-600 font-semibold" : "text-gray-500"}>{isRecording ? "Yes" : "No"}</span></div>
+              <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
+                <div><strong>Tremor Samples:</strong> <span className="text-primary font-semibold">{tremorSamplesRef.current.length}</span></div>
+                <div><strong>Tap Intervals:</strong> <span className="text-primary font-semibold">{tapIntervals.length}</span></div>
+                <div><strong>Test Duration:</strong> <span className="text-green-400 font-semibold">{testDuration.toFixed(1)}s</span></div>
+                <div><strong>Recording:</strong> <span className={isRecording ? "text-green-400 font-semibold" : "text-muted-foreground"}>{isRecording ? "Yes" : "No"}</span></div>
               </div>
-              
+
               {/* Recent tremor data preview */}
               {tremorSamplesRef.current.length > 0 && (
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-muted-foreground">
                   <strong>Recent Tremor Data:</strong>
-                  <div className="font-mono bg-gray-50 p-2 rounded mt-1 border border-gray-200 text-gray-800">
+                  <div className="font-mono bg-black/20 p-2 rounded mt-1 border border-white/10 text-foreground">
                     Last Y: {tremorSamplesRef.current[tremorSamplesRef.current.length - 1]?.y.toFixed(2)}
                   </div>
                 </div>
               )}
-              
+
               {/* Recent tap intervals preview */}
               {tapIntervals.length > 0 && (
-                <div className="text-xs text-gray-600">
+                <div className="text-xs text-muted-foreground">
                   <strong>Recent Tap Intervals:</strong>
-                  <div className="font-mono bg-gray-50 p-2 rounded mt-1 border border-gray-200 text-gray-800">
+                  <div className="font-mono bg-black/20 p-2 rounded mt-1 border border-white/10 text-foreground">
                     Last: {tapIntervals[tapIntervals.length - 1]?.toFixed(0)}ms
                   </div>
                 </div>
               )}
-              
+
               {/* Computed metrics preview */}
-              <div className="text-xs border-t border-gray-200 pt-2 text-gray-600">
-                <strong className="text-gray-900">Live Computed Metrics:</strong>
+              <div className="text-xs border-t border-white/10 pt-2 text-muted-foreground">
+                <strong className="text-foreground">Live Computed Metrics:</strong>
                 <div className="grid grid-cols-2 gap-2 mt-1">
-                  <div>Tremor Freq: <span className="text-blue-600 font-semibold">{computeTremorMetrics(tremorSamplesRef.current).freqHz.toFixed(2)} Hz</span></div>
-                  <div>Coordination: <span className="text-green-600 font-semibold">{computeCoordinationScore(tapIntervals)}%</span></div>
+                  <div>Tremor Freq: <span className="text-primary font-semibold">{computeTremorMetrics(tremorSamplesRef.current).freqHz.toFixed(2)} Hz</span></div>
+                  <div>Coordination: <span className="text-green-400 font-semibold">{computeCoordinationScore(tapIntervals)}%</span></div>
                 </div>
               </div>
             </div>
@@ -1048,52 +1049,53 @@ function predictWebcam() {
 
       {/* Enhanced Inline Analysis Report - Only shown when analysis is complete */}
       {analysisResults && (
-        <Card ref={reportRef} className="bg-white shadow-lg border-l-4 border-blue-600 max-w-6xl mx-auto px-4">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-white">
-            <CardTitle className="flex items-center gap-2 text-gray-900">
-              <FileText className="w-5 h-5 text-blue-600" />
+        <Card ref={reportRef} className="glass-panel border-0 max-w-6xl mx-auto px-4 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-primary/50"></div>
+          <CardHeader className="bg-white/5 border-b border-white/5">
+            <CardTitle className="flex items-center gap-2 text-foreground">
+              <FileText className="w-5 h-5 text-primary" />
               Advanced Motor Analysis Report
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-muted-foreground">
               Comprehensive clinical analysis and recommendations
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 bg-white">
-            <div className="text-sm text-gray-600">
+          <CardContent className="space-y-6 pt-6">
+            <div className="text-sm text-muted-foreground">
               Generated: {new Date(analysisResults.timestamp).toLocaleString()}
             </div>
-            
+
             {/* Key Metrics Summary */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center p-4 rounded-lg bg-blue-50 border border-blue-200">
-                <div className="text-sm text-gray-600">Tap Rate</div>
-                <div className="text-xl font-bold text-blue-600">{analysisResults.tapRate.toFixed(2)} /sec</div>
-                <div className="text-xs text-gray-600">
+              <div className="text-center p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                <div className="text-sm text-blue-200">Tap Rate</div>
+                <div className="text-xl font-bold text-blue-400">{analysisResults.tapRate.toFixed(2)} /sec</div>
+                <div className="text-xs text-blue-200/70">
                   {analysisResults.tapRate >= 5 ? 'Normal' : analysisResults.tapRate >= 3 ? 'Reduced' : 'Severely Reduced'}
                 </div>
               </div>
-              <div className="text-center p-4 rounded-lg bg-green-50 border border-green-200">
-                <div className="text-sm text-gray-600">Coordination</div>
-                <div className="text-xl font-bold text-green-600">{analysisResults.coordinationScore}%</div>
-                <div className="text-xs text-gray-600">
+              <div className="text-center p-4 rounded-lg bg-green-500/10 border border-green-500/20">
+                <div className="text-sm text-green-200">Coordination</div>
+                <div className="text-xl font-bold text-green-400">{analysisResults.coordinationScore}%</div>
+                <div className="text-xs text-green-200/70">
                   {analysisResults.coordinationScore >= 80 ? 'Excellent' : analysisResults.coordinationScore >= 60 ? 'Good' : 'Poor'}
                 </div>
               </div>
-              <div className="text-center p-4 rounded-lg bg-orange-50 border border-orange-200">
-                <div className="text-sm text-gray-600">Tremor</div>
-                <div className="text-xl font-bold text-orange-600">
+              <div className="text-center p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                <div className="text-sm text-orange-200">Tremor</div>
+                <div className="text-xl font-bold text-orange-400">
                   {analysisResults.tremorFrequency > 0 ? `${analysisResults.tremorFrequency.toFixed(1)} Hz` : '—'}
                 </div>
-                <div className="text-xs text-gray-600">
-                  {analysisResults.tremorFrequency === 0 ? 'None' : 
-                   analysisResults.tremorFrequency <= 3 ? 'Physiological' : 
-                   analysisResults.tremorFrequency <= 12 ? 'Pathological' : 'High Frequency'}
+                <div className="text-xs text-orange-200/70">
+                  {analysisResults.tremorFrequency === 0 ? 'None' :
+                    analysisResults.tremorFrequency <= 3 ? 'Physiological' :
+                      analysisResults.tremorFrequency <= 12 ? 'Pathological' : 'High Frequency'}
                 </div>
               </div>
-              <div className="text-center p-4 rounded-lg bg-purple-50 border border-purple-200">
-                <div className="text-sm text-gray-600">Quality Score</div>
-                <div className="text-xl font-bold text-purple-600">{analysisResults.qualityScore}%</div>
-                <div className="text-xs text-gray-600">
+              <div className="text-center p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                <div className="text-sm text-purple-200">Quality Score</div>
+                <div className="text-xl font-bold text-purple-400">{analysisResults.qualityScore}%</div>
+                <div className="text-xs text-purple-200/70">
                   {analysisResults.qualityScore >= 80 ? 'Excellent' : analysisResults.qualityScore >= 60 ? 'Good' : 'Needs Attention'}
                 </div>
               </div>
@@ -1102,25 +1104,24 @@ function predictWebcam() {
             {/* Clinical Findings */}
             {analysisResults.clinicalFindings && analysisResults.clinicalFindings.length > 0 && (
               <div className="space-y-3">
-                <h3 className="font-semibold text-lg text-gray-900">Clinical Findings</h3>
+                <h3 className="font-semibold text-lg text-foreground">Clinical Findings</h3>
                 <div className="space-y-3">
                   {analysisResults.clinicalFindings.map((finding, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 bg-white">
+                    <div key={index} className="border border-white/10 rounded-lg p-4 bg-white/5">
                       <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-medium text-gray-900">{finding.parameter}</h4>
-                        <span className={`px-2 py-1 rounded text-xs font-medium ${
-                          finding.status === 'normal' ? 'bg-green-100 text-green-800' :
-                          finding.status === 'borderline' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
+                        <h4 className="font-medium text-foreground">{finding.parameter}</h4>
+                        <span className={`px-2 py-1 rounded text-xs font-medium ${finding.status === 'normal' ? 'bg-green-500/20 text-green-300' :
+                            finding.status === 'borderline' ? 'bg-yellow-500/20 text-yellow-300' :
+                              'bg-red-500/20 text-red-300'
+                          }`}>
                           {finding.status.toUpperCase()}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm mb-2 text-gray-700">
+                      <div className="grid grid-cols-2 gap-4 text-sm mb-2 text-muted-foreground">
                         <div><strong>Value:</strong> {finding.value}</div>
                         <div><strong>Normal Range:</strong> {finding.normalRange}</div>
                       </div>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-muted-foreground/80">
                         <strong>Clinical Significance:</strong> {finding.clinicalSignificance}
                       </div>
                     </div>
@@ -1132,27 +1133,26 @@ function predictWebcam() {
             {/* Disease Risk Assessment */}
             {analysisResults.diseaseRiskAssessment && (
               <div className="space-y-3">
-                <h3 className="font-semibold text-lg text-gray-900">Disease Risk Assessment</h3>
+                <h3 className="font-semibold text-lg text-foreground">Disease Risk Assessment</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Parkinson's Disease */}
-                  <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div className="border border-white/10 rounded-lg p-4 bg-white/5">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium text-gray-900">Parkinson's Disease</h4>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        analysisResults.diseaseRiskAssessment.parkinsons.riskLevel === 'low' ? 'bg-green-100 text-green-800' :
-                        analysisResults.diseaseRiskAssessment.parkinsons.riskLevel === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <h4 className="font-medium text-foreground">Parkinson's Disease</h4>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${analysisResults.diseaseRiskAssessment.parkinsons.riskLevel === 'low' ? 'bg-green-500/20 text-green-300' :
+                          analysisResults.diseaseRiskAssessment.parkinsons.riskLevel === 'moderate' ? 'bg-yellow-500/20 text-yellow-300' :
+                            'bg-red-500/20 text-red-300'
+                        }`}>
                         {analysisResults.diseaseRiskAssessment.parkinsons.riskLevel.toUpperCase()} RISK
                       </span>
                     </div>
-                    <div className="text-sm mb-2">
+                    <div className="text-sm mb-2 text-muted-foreground">
                       <strong>Confidence:</strong> {(analysisResults.diseaseRiskAssessment.parkinsons.confidence * 100).toFixed(0)}%
                     </div>
                     {analysisResults.diseaseRiskAssessment.parkinsons.indicators.length > 0 && (
-                      <div className="text-sm mb-2 text-gray-700">
+                      <div className="text-sm mb-2 text-muted-foreground">
                         <strong>Indicators:</strong>
-                        <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                        <ul className="list-disc list-inside mt-1 text-xs text-muted-foreground/80">
                           {analysisResults.diseaseRiskAssessment.parkinsons.indicators.map((indicator, idx) => (
                             <li key={idx}>{indicator}</li>
                           ))}
@@ -1160,9 +1160,9 @@ function predictWebcam() {
                       </div>
                     )}
                     {analysisResults.diseaseRiskAssessment.parkinsons.symptoms.length > 0 && (
-                      <div className="text-sm text-gray-700">
+                      <div className="text-sm text-muted-foreground">
                         <strong>Associated Symptoms:</strong>
-                        <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                        <ul className="list-disc list-inside mt-1 text-xs text-muted-foreground/80">
                           {analysisResults.diseaseRiskAssessment.parkinsons.symptoms.map((symptom, idx) => (
                             <li key={idx}>{symptom}</li>
                           ))}
@@ -1172,24 +1172,23 @@ function predictWebcam() {
                   </div>
 
                   {/* Essential Tremor */}
-                  <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div className="border border-white/10 rounded-lg p-4 bg-white/5">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium text-gray-900">Essential Tremor</h4>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        analysisResults.diseaseRiskAssessment.essentialTremor.riskLevel === 'low' ? 'bg-green-100 text-green-800' :
-                        analysisResults.diseaseRiskAssessment.essentialTremor.riskLevel === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <h4 className="font-medium text-foreground">Essential Tremor</h4>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${analysisResults.diseaseRiskAssessment.essentialTremor.riskLevel === 'low' ? 'bg-green-500/20 text-green-300' :
+                          analysisResults.diseaseRiskAssessment.essentialTremor.riskLevel === 'moderate' ? 'bg-yellow-500/20 text-yellow-300' :
+                            'bg-red-500/20 text-red-300'
+                        }`}>
                         {analysisResults.diseaseRiskAssessment.essentialTremor.riskLevel.toUpperCase()} RISK
                       </span>
                     </div>
-                    <div className="text-sm mb-2 text-gray-700">
+                    <div className="text-sm mb-2 text-muted-foreground">
                       <strong>Confidence:</strong> {(analysisResults.diseaseRiskAssessment.essentialTremor.confidence * 100).toFixed(0)}%
                     </div>
                     {analysisResults.diseaseRiskAssessment.essentialTremor.indicators.length > 0 && (
-                      <div className="text-sm mb-2 text-gray-700">
+                      <div className="text-sm mb-2 text-muted-foreground">
                         <strong>Indicators:</strong>
-                        <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                        <ul className="list-disc list-inside mt-1 text-xs text-muted-foreground/80">
                           {analysisResults.diseaseRiskAssessment.essentialTremor.indicators.map((indicator, idx) => (
                             <li key={idx}>{indicator}</li>
                           ))}
@@ -1197,9 +1196,9 @@ function predictWebcam() {
                       </div>
                     )}
                     {analysisResults.diseaseRiskAssessment.essentialTremor.symptoms.length > 0 && (
-                      <div className="text-sm text-gray-700">
+                      <div className="text-sm text-muted-foreground">
                         <strong>Associated Symptoms:</strong>
-                        <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                        <ul className="list-disc list-inside mt-1 text-xs text-muted-foreground/80">
                           {analysisResults.diseaseRiskAssessment.essentialTremor.symptoms.map((symptom, idx) => (
                             <li key={idx}>{symptom}</li>
                           ))}
@@ -1209,24 +1208,23 @@ function predictWebcam() {
                   </div>
 
                   {/* Cerebellar Disorders */}
-                  <div className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div className="border border-white/10 rounded-lg p-4 bg-white/5">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-medium text-gray-900">Cerebellar Disorders</h4>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        analysisResults.diseaseRiskAssessment.cerebellarDisorders.riskLevel === 'low' ? 'bg-green-100 text-green-800' :
-                        analysisResults.diseaseRiskAssessment.cerebellarDisorders.riskLevel === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
+                      <h4 className="font-medium text-foreground">Cerebellar Disorders</h4>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${analysisResults.diseaseRiskAssessment.cerebellarDisorders.riskLevel === 'low' ? 'bg-green-500/20 text-green-300' :
+                          analysisResults.diseaseRiskAssessment.cerebellarDisorders.riskLevel === 'moderate' ? 'bg-yellow-500/20 text-yellow-300' :
+                            'bg-red-500/20 text-red-300'
+                        }`}>
                         {analysisResults.diseaseRiskAssessment.cerebellarDisorders.riskLevel.toUpperCase()} RISK
                       </span>
                     </div>
-                    <div className="text-sm mb-2 text-gray-700">
+                    <div className="text-sm mb-2 text-muted-foreground">
                       <strong>Confidence:</strong> {(analysisResults.diseaseRiskAssessment.cerebellarDisorders.confidence * 100).toFixed(0)}%
                     </div>
                     {analysisResults.diseaseRiskAssessment.cerebellarDisorders.indicators.length > 0 && (
-                      <div className="text-sm mb-2 text-gray-700">
+                      <div className="text-sm mb-2 text-muted-foreground">
                         <strong>Indicators:</strong>
-                        <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                        <ul className="list-disc list-inside mt-1 text-xs text-muted-foreground/80">
                           {analysisResults.diseaseRiskAssessment.cerebellarDisorders.indicators.map((indicator, idx) => (
                             <li key={idx}>{indicator}</li>
                           ))}
@@ -1234,9 +1232,9 @@ function predictWebcam() {
                       </div>
                     )}
                     {analysisResults.diseaseRiskAssessment.cerebellarDisorders.symptoms.length > 0 && (
-                      <div className="text-sm text-gray-700">
+                      <div className="text-sm text-muted-foreground">
                         <strong>Associated Symptoms:</strong>
-                        <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                        <ul className="list-disc list-inside mt-1 text-xs text-muted-foreground/80">
                           {analysisResults.diseaseRiskAssessment.cerebellarDisorders.symptoms.map((symptom, idx) => (
                             <li key={idx}>{symptom}</li>
                           ))}
@@ -1251,8 +1249,8 @@ function predictWebcam() {
             {/* Motor Characteristics */}
             {analysisResults.motorCharacteristics && (
               <div className="space-y-3">
-                <h3 className="font-semibold text-lg text-gray-900">Motor Characteristics</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                <h3 className="font-semibold text-lg text-foreground">Motor Characteristics</h3>
+                <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
                   <div>
                     <strong>Movement Speed:</strong> {analysisResults.motorCharacteristics.movementSpeed.replace('_', ' ')}
                   </div>
@@ -1266,16 +1264,16 @@ function predictWebcam() {
                     <strong>Rhythmicity:</strong> {analysisResults.motorCharacteristics.rhythmicity}
                   </div>
                 </div>
-                <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <strong className="text-gray-900">Overall Assessment:</strong> <span className="text-gray-700">{analysisResults.motorCharacteristics.overallAssessment}</span>
+                <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                  <strong className="text-foreground">Overall Assessment:</strong> <span className="text-muted-foreground">{analysisResults.motorCharacteristics.overallAssessment}</span>
                 </div>
               </div>
             )}
 
             {/* Clinical Recommendations */}
             <div className="space-y-3">
-              <h3 className="font-semibold text-lg text-gray-900">Clinical Recommendations</h3>
-              <ul className="list-disc list-inside space-y-2 text-sm text-gray-700">
+              <h3 className="font-semibold text-lg text-foreground">Clinical Recommendations</h3>
+              <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
                 {analysisResults.recommendations.map((rec, index) => (
                   <li key={index}>{rec}</li>
                 ))}
@@ -1284,7 +1282,8 @@ function predictWebcam() {
 
             {/* Download Report Button */}
             <div className="flex justify-center">
-              <Button 
+              <Button
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
                 onClick={() => {
                   const report = `
 ADVANCED MOTOR ANALYSIS REPORT
@@ -1299,27 +1298,27 @@ Generated: ${new Date().toLocaleString()}
 - Quality Score: ${analysisResults.qualityScore}%
 
 === CLINICAL FINDINGS ===
-${analysisResults.clinicalFindings?.map(finding => 
-`${finding.parameter}: ${finding.value} (${finding.status.toUpperCase()})
+${analysisResults.clinicalFindings?.map(finding =>
+                    `${finding.parameter}: ${finding.value} (${finding.status.toUpperCase()})
   Normal Range: ${finding.normalRange}
   Clinical Significance: ${finding.clinicalSignificance}`
-).join('\n\n') || 'No clinical findings available'}
+                  ).join('\n\n') || 'No clinical findings available'}
 
 === DISEASE RISK ASSESSMENT ===
 
 Parkinson's Disease: ${analysisResults.diseaseRiskAssessment?.parkinsons.riskLevel.toUpperCase()} RISK (${(analysisResults.diseaseRiskAssessment?.parkinsons.confidence * 100).toFixed(0)}% confidence)
-${analysisResults.diseaseRiskAssessment?.parkinsons.indicators.length > 0 ? 
-  `Indicators: ${analysisResults.diseaseRiskAssessment.parkinsons.indicators.join(', ')}
+${analysisResults.diseaseRiskAssessment?.parkinsons.indicators.length > 0 ?
+                      `Indicators: ${analysisResults.diseaseRiskAssessment.parkinsons.indicators.join(', ')}
   Symptoms: ${analysisResults.diseaseRiskAssessment.parkinsons.symptoms.join(', ')}` : 'No specific indicators detected'}
 
 Essential Tremor: ${analysisResults.diseaseRiskAssessment?.essentialTremor.riskLevel.toUpperCase()} RISK (${(analysisResults.diseaseRiskAssessment?.essentialTremor.confidence * 100).toFixed(0)}% confidence)
-${analysisResults.diseaseRiskAssessment?.essentialTremor.indicators.length > 0 ? 
-  `Indicators: ${analysisResults.diseaseRiskAssessment.essentialTremor.indicators.join(', ')}
+${analysisResults.diseaseRiskAssessment?.essentialTremor.indicators.length > 0 ?
+                      `Indicators: ${analysisResults.diseaseRiskAssessment.essentialTremor.indicators.join(', ')}
   Symptoms: ${analysisResults.diseaseRiskAssessment.essentialTremor.symptoms.join(', ')}` : 'No specific indicators detected'}
 
 Cerebellar Disorders: ${analysisResults.diseaseRiskAssessment?.cerebellarDisorders.riskLevel.toUpperCase()} RISK (${(analysisResults.diseaseRiskAssessment?.cerebellarDisorders.confidence * 100).toFixed(0)}% confidence)
-${analysisResults.diseaseRiskAssessment?.cerebellarDisorders.indicators.length > 0 ? 
-  `Indicators: ${analysisResults.diseaseRiskAssessment.cerebellarDisorders.indicators.join(', ')}
+${analysisResults.diseaseRiskAssessment?.cerebellarDisorders.indicators.length > 0 ?
+                      `Indicators: ${analysisResults.diseaseRiskAssessment.cerebellarDisorders.indicators.join(', ')}
   Symptoms: ${analysisResults.diseaseRiskAssessment.cerebellarDisorders.symptoms.join(', ')}` : 'No specific indicators detected'}
 
 === MOTOR CHARACTERISTICS ===
@@ -1337,7 +1336,7 @@ This is an AI-powered screening tool for research and educational purposes only.
 Results are not diagnostic and should not replace professional medical evaluation. 
 Always consult with qualified healthcare professionals for proper diagnosis and treatment.
                   `;
-                  
+
                   const blob = new Blob([report], { type: 'text/plain' });
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement('a');
@@ -1352,9 +1351,9 @@ Always consult with qualified healthcare professionals for proper diagnosis and 
               </Button>
             </div>
 
-            <div className="text-xs text-gray-600 p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500 border border-yellow-200">
-              <strong className="text-gray-900">⚠️ Important Disclaimer:</strong> This is an AI-powered screening tool for research and educational purposes only. 
-              Results are not diagnostic and should not replace professional medical evaluation. Always consult with qualified healthcare 
+            <div className="text-xs text-yellow-200/80 p-4 bg-yellow-500/10 rounded-lg border-l-4 border-yellow-500 border border-yellow-500/20">
+              <strong className="text-yellow-200">⚠️ Important Disclaimer:</strong> This is an AI-powered screening tool for research and educational purposes only.
+              Results are not diagnostic and should not replace professional medical evaluation. Always consult with qualified healthcare
               professionals for proper diagnosis and treatment.
             </div>
           </CardContent>

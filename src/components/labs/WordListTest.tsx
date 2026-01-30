@@ -62,7 +62,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'House', category: 'building' },
   { word: 'Ice', category: 'nature' },
   { word: 'Jacket', category: 'clothing' },
-  
+
   // Indian context words
   { word: 'Mango', category: 'fruit' },
   { word: 'Rice', category: 'food' },
@@ -74,7 +74,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Mountain', category: 'nature' },
   { word: 'Train', category: 'transport' },
   { word: 'Market', category: 'place' },
-  
+
   // More common words
   { word: 'Table', category: 'furniture' },
   { word: 'Phone', category: 'object' },
@@ -86,7 +86,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Fish', category: 'animal' },
   { word: 'Car', category: 'transport' },
   { word: 'Road', category: 'place' },
-  
+
   // Additional words for variety
   { word: 'Bread', category: 'food' },
   { word: 'Milk', category: 'food' },
@@ -98,7 +98,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Bed', category: 'furniture' },
   { word: 'Window', category: 'object' },
   { word: 'Garden', category: 'place' },
-  
+
   // More variety for recognition test
   { word: 'Banana', category: 'fruit' },
   { word: 'Orange', category: 'fruit' },
@@ -110,7 +110,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Cabbage', category: 'food' },
   { word: 'Spinach', category: 'food' },
   { word: 'Wheat', category: 'food' },
-  
+
   { word: 'Dog', category: 'animal' },
   { word: 'Cat', category: 'animal' },
   { word: 'Cow', category: 'animal' },
@@ -121,7 +121,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Peacock', category: 'animal' },
   { word: 'Parrot', category: 'animal' },
   { word: 'Crow', category: 'animal' },
-  
+
   { word: 'Shirt', category: 'clothing' },
   { word: 'Pant', category: 'clothing' },
   { word: 'Dress', category: 'clothing' },
@@ -132,7 +132,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Sock', category: 'clothing' },
   { word: 'Glove', category: 'clothing' },
   { word: 'Ring', category: 'jewelry' },
-  
+
   { word: 'School', category: 'building' },
   { word: 'Hospital', category: 'building' },
   { word: 'Office', category: 'building' },
@@ -143,7 +143,7 @@ const WORD_DATABASE: WordData[] = [
   { word: 'Restaurant', category: 'building' },
   { word: 'Hotel', category: 'building' },
   { word: 'Factory', category: 'building' },
-  
+
   { word: 'Bus', category: 'transport' },
   { word: 'Bicycle', category: 'transport' },
   { word: 'Boat', category: 'transport' },
@@ -157,10 +157,10 @@ const WORD_DATABASE: WordData[] = [
 ];
 
 // Word Display Component
-const WordDisplay: React.FC<{ 
-  word: string; 
-  isVisible: boolean; 
-  currentIndex: number; 
+const WordDisplay: React.FC<{
+  word: string;
+  isVisible: boolean;
+  currentIndex: number;
   totalWords: number;
   onSpeak?: () => void;
 }> = ({ word, isVisible, currentIndex, totalWords, onSpeak }) => {
@@ -171,23 +171,22 @@ const WordDisplay: React.FC<{
           Word {currentIndex + 1} of {totalWords}
         </span>
         {onSpeak && (
-          <Button variant="outline" size="sm" onClick={onSpeak}>
+          <Button variant="outline" size="sm" onClick={onSpeak} className="border-white/10 bg-white/5 hover:bg-white/10 text-foreground">
             <Volume2 className="w-4 h-4" />
           </Button>
         )}
       </div>
-      
+
       <div className="flex items-center justify-center h-32">
-        <div className={`text-6xl font-bold transition-all duration-500 ${
-          isVisible 
-            ? 'opacity-100 scale-100 text-primary' 
-            : 'opacity-0 scale-75 text-muted-foreground'
-        }`}>
+        <div className={`text-6xl font-bold transition-all duration-500 ${isVisible
+          ? 'opacity-100 scale-100 text-foreground drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]'
+          : 'opacity-0 scale-75 text-muted-foreground'
+          }`}>
           {isVisible ? word : ''}
         </div>
       </div>
-      
-      <Progress value={((currentIndex + 1) / totalWords) * 100} className="w-full max-w-md mx-auto" />
+
+      <Progress value={((currentIndex + 1) / totalWords) * 100} className="w-full max-w-md mx-auto bg-white/10" indicatorClassName="bg-blue-500" />
     </div>
   );
 };
@@ -234,7 +233,7 @@ const RecallInput: React.FC<{
           {phase === 'immediate' ? 'Immediate Recall' : 'Delayed Recall'}
         </h3>
         <p className="text-muted-foreground">
-          {phase === 'immediate' 
+          {phase === 'immediate'
             ? 'Type all the words you remember from the list you just saw'
             : 'Type all the words you remember from the original list (before the counting task)'
           }
@@ -248,15 +247,16 @@ const RecallInput: React.FC<{
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Type a word and press Enter"
-          className="flex-1"
+          className="flex-1 bg-black/20 border-white/10 text-foreground placeholder:text-white/20 focus:border-blue-500/50"
           autoFocus
         />
-        <Button onClick={addWord} disabled={!inputValue.trim()}>
+        <Button onClick={addWord} disabled={!inputValue.trim()} className="bg-blue-600 hover:bg-blue-700 text-white">
           Add Word
         </Button>
         {supportsSpeech && (
           <Button
             variant={isListening ? "destructive" : "outline"}
+            className={isListening ? "" : "border-white/10 bg-white/5 hover:bg-white/10 text-foreground"}
             onClick={onToggleListening}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -265,13 +265,13 @@ const RecallInput: React.FC<{
       </div>
 
       <div className="space-y-2">
-        <h4 className="font-medium">Words Recalled ({recalledWords.length}):</h4>
-        <div className="flex flex-wrap gap-2 min-h-[60px] p-4 border rounded-lg bg-muted/30">
+        <h4 className="font-medium text-foreground">Words Recalled ({recalledWords.length}):</h4>
+        <div className="flex flex-wrap gap-2 min-h-[60px] p-4 border border-white/10 rounded-lg bg-black/20">
           {recalledWords.map((word, index) => (
             <Badge
               key={index}
               variant="secondary"
-              className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground"
+              className="cursor-pointer bg-blue-500/20 text-blue-300 hover:bg-red-500/20 hover:text-red-300 border border-blue-500/20 transition-colors"
               onClick={() => removeWord(index)}
             >
               {word} ×
@@ -284,7 +284,7 @@ const RecallInput: React.FC<{
       </div>
 
       <div className="flex gap-4">
-        <Button onClick={handleSubmit} className="flex-1">
+        <Button onClick={handleSubmit} className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0">
           {phase === 'immediate' ? 'Continue to Distractor Task' : 'Continue to Recognition Test'}
         </Button>
       </div>
@@ -363,34 +363,35 @@ const DistractorTask: React.FC<{
   };
 
   return (
-    <Card className="max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Timer className="w-5 h-5" />
+    <Card className="glass-panel border-0 max-w-2xl mx-auto relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-1 h-full bg-orange-500/50"></div>
+      <CardHeader className="bg-white/5 border-b border-white/5">
+        <CardTitle className="flex items-center gap-2 text-foreground">
+          <Timer className="w-5 h-5 text-orange-400" />
           Distractor Task
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-muted-foreground">
           This simple task helps clear your short-term memory before the final recall test
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 pt-6">
         <div className="text-center">
-          <div className="text-4xl font-bold mb-2">{formatTime(timeLeft)}</div>
-          <Progress value={((duration - timeLeft) / duration) * 100} className="w-full" />
+          <div className="text-4xl font-bold mb-2 text-foreground">{formatTime(timeLeft)}</div>
+          <Progress value={((duration - timeLeft) / duration) * 100} className="w-full bg-white/10" indicatorClassName="bg-orange-500" />
         </div>
 
         {!isActive ? (
           <div className="text-center space-y-4">
-            <p className="text-lg">{getTaskInstructions()}</p>
-            <Button onClick={startTask} size="lg">
+            <p className="text-lg text-foreground">{getTaskInstructions()}</p>
+            <Button onClick={startTask} size="lg" className="bg-orange-600 hover:bg-orange-700 text-white">
               <Play className="w-4 h-4 mr-2" />
               Start Distractor Task
             </Button>
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-center font-medium">{getTaskInstructions()}</p>
-            
+            <p className="text-center font-medium text-foreground">{getTaskInstructions()}</p>
+
             {taskType === 'counting' && (
               <div className="space-y-4">
                 <div className="text-center">
@@ -400,7 +401,7 @@ const DistractorTask: React.FC<{
                     onChange={(e) => setUserInput(e.target.value)}
                     onKeyPress={handleCountingInput}
                     placeholder="Enter next number"
-                    className="text-center text-xl"
+                    className="text-center text-xl bg-black/20 border-white/10 text-foreground"
                     autoFocus
                   />
                 </div>
@@ -424,11 +425,11 @@ const DistractorTask: React.FC<{
                     }
                   }}
                   placeholder="Type an animal name and press Enter"
-                  className="text-center"
+                  className="text-center bg-black/20 border-white/10 text-foreground"
                   autoFocus
                 />
                 <div className="text-center">
-                  <p className="text-sm">Animals named: {responses.length}</p>
+                  <p className="text-sm text-foreground">Animals named: {responses.length}</p>
                   <p className="text-xs text-muted-foreground">
                     Recent: {responses.slice(-3).join(', ')}
                   </p>
@@ -455,18 +456,18 @@ const RecognitionTest: React.FC<{
     const availableWords = WORD_DATABASE.filter(
       item => !originalWords.includes(item.word)
     );
-    
+
     // Shuffle and take 10 new words
     const shuffledNew = [...availableWords].sort(() => Math.random() - 0.5);
     const newWords = shuffledNew.slice(0, 10).map(item => item.word);
-    
+
     // Combine and shuffle all 20 words
     const allWords = [...originalWords, ...newWords].sort(() => Math.random() - 0.5);
     setTestWords(allWords);
   }, [originalWords]);
 
   const toggleWord = (word: string) => {
-    setSelectedWords(prev => 
+    setSelectedWords(prev =>
       prev.includes(word)
         ? prev.filter(w => w !== word)
         : [...prev, word]
@@ -479,10 +480,10 @@ const RecognitionTest: React.FC<{
       originalWords,
       selectedCount: selectedWords.length
     });
-    
+
     const correctCount = selectedWords.filter(word => originalWords.includes(word)).length;
     console.log('Correct count:', correctCount);
-    
+
     onComplete({ selectedWords, correctCount });
   };
 
@@ -503,7 +504,10 @@ const RecognitionTest: React.FC<{
           <Button
             key={index}
             variant={selectedWords.includes(word) ? "default" : "outline"}
-            className="h-16 text-lg"
+            className={`h-16 text-lg transition-all ${selectedWords.includes(word)
+              ? 'bg-blue-600 text-white hover:bg-blue-700 border-transparent'
+              : 'bg-white/5 border-white/10 text-foreground hover:bg-white/10 hover:border-white/20'
+              }`}
             onClick={() => toggleWord(word)}
           >
             {word}
@@ -512,7 +516,7 @@ const RecognitionTest: React.FC<{
       </div>
 
       <div className="text-center">
-        <Button onClick={handleSubmit} size="lg" className="px-8">
+        <Button onClick={handleSubmit} size="lg" className="px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0 shadow-lg shadow-blue-900/20">
           Complete Test
         </Button>
       </div>
@@ -521,8 +525,8 @@ const RecognitionTest: React.FC<{
 };
 
 // Results Summary Component
-const ResultsSummary: React.FC<{ 
-  results: TestResults; 
+const ResultsSummary: React.FC<{
+  results: TestResults;
   onRestart: () => void;
   onExport: () => void;
 }> = ({ results, onRestart, onExport }) => {
@@ -550,27 +554,30 @@ const ResultsSummary: React.FC<{
       </div>
 
       {/* Overall Risk Assessment */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Brain className="w-5 h-5" />
+      {/* Overall Risk Assessment */}
+      <Card className="glass-panel border-0 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+        <CardHeader className="bg-white/5 border-b border-white/5">
+          <CardTitle className="flex items-center gap-2 text-foreground">
+            <Brain className="w-5 h-5 text-blue-400" />
             Overall Assessment
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="text-center space-y-4">
             <div className="flex items-center justify-center gap-2">
-              {results.interpretation.overallRisk === 'Low' && <CheckCircle className="w-8 h-8 text-green-500" />}
+              {results.interpretation.overallRisk === 'Low' && <CheckCircle className="w-8 h-8 text-green-400" />}
               {results.interpretation.overallRisk === 'Medium' && <AlertTriangle className="w-8 h-8 text-yellow-500" />}
               {results.interpretation.overallRisk === 'High' && <XCircle className="w-8 h-8 text-red-500" />}
-              <span className={`text-2xl font-bold ${
-                results.interpretation.overallRisk === 'Low' ? 'text-green-500' :
-                results.interpretation.overallRisk === 'Medium' ? 'text-yellow-500' : 'text-red-500'
-              }`}>
+              <span className={`text-2xl font-bold ${results.interpretation.overallRisk === 'Low' ? 'text-green-400' :
+                results.interpretation.overallRisk === 'Medium' ? 'text-yellow-400' : 'text-red-400'
+                }`}>
                 {results.interpretation.overallRisk} Risk
               </span>
             </div>
-            <Badge variant={getScoreBadge(results.interpretation.delayedRecallLevel)} className="text-lg px-4 py-2">
+            <Badge variant="outline" className={`text-lg px-4 py-2 border-0 ${results.interpretation.delayedRecallLevel === 'Normal' ? 'bg-green-500/20 text-green-300' :
+              results.interpretation.delayedRecallLevel === 'Mild Concern' ? 'bg-yellow-500/20 text-yellow-300' : 'bg-red-500/20 text-red-300'
+              }`}>
               {results.interpretation.delayedRecallLevel}
             </Badge>
           </div>
@@ -579,12 +586,12 @@ const ResultsSummary: React.FC<{
 
       {/* Detailed Scores */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Immediate Recall</CardTitle>
-            <CardDescription className="text-center">Right after learning</CardDescription>
+        <Card className="glass-panel border-0">
+          <CardHeader className="bg-white/5 border-b border-white/5">
+            <CardTitle className="text-center text-foreground">Immediate Recall</CardTitle>
+            <CardDescription className="text-center text-muted-foreground">Right after learning</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <div className="text-center space-y-2">
               <div className={`text-4xl font-bold ${getScoreColor(results.immediateRecall.score, 10)}`}>
                 {results.immediateRecall.score}/10
@@ -596,17 +603,17 @@ const ResultsSummary: React.FC<{
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Delayed Recall</CardTitle>
-            <CardDescription className="text-center">After 5-minute delay (Primary Metric)</CardDescription>
+        <Card className="glass-panel border-0 border-l-2 border-l-blue-500">
+          <CardHeader className="bg-white/5 border-b border-white/5">
+            <CardTitle className="text-center text-foreground">Delayed Recall</CardTitle>
+            <CardDescription className="text-center text-muted-foreground">After 5-minute delay (Primary Metric)</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <div className="text-center space-y-2">
               <div className={`text-4xl font-bold ${getScoreColor(results.delayedRecall.score, 10)}`}>
                 {results.delayedRecall.score}/10
               </div>
-              <Badge variant={getScoreBadge(results.interpretation.delayedRecallLevel)}>
+              <Badge variant="outline" className="border-0 bg-white/10 text-foreground">
                 {results.interpretation.delayedRecallLevel}
               </Badge>
               <p className="text-xs text-muted-foreground">
@@ -616,17 +623,17 @@ const ResultsSummary: React.FC<{
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Recognition</CardTitle>
-            <CardDescription className="text-center">Identifying original words</CardDescription>
+        <Card className="glass-panel border-0">
+          <CardHeader className="bg-white/5 border-b border-white/5">
+            <CardTitle className="text-center text-foreground">Recognition</CardTitle>
+            <CardDescription className="text-center text-muted-foreground">Identifying original words</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <div className="text-center space-y-2">
               <div className={`text-4xl font-bold ${getScoreColor(results.recognition.score, 10)}`}>
                 {results.recognition.score}/10
               </div>
-              <Badge variant={getScoreBadge(results.interpretation.recognitionLevel)}>
+              <Badge variant="outline" className="border-0 bg-white/10 text-foreground">
                 {results.interpretation.recognitionLevel}
               </Badge>
               <p className="text-xs text-muted-foreground">
@@ -638,52 +645,53 @@ const ResultsSummary: React.FC<{
       </div>
 
       {/* Detailed Analysis */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Detailed Analysis</CardTitle>
+      {/* Detailed Analysis */}
+      <Card className="glass-panel border-0">
+        <CardHeader className="bg-white/5 border-b border-white/5">
+          <CardTitle className="text-foreground">Detailed Analysis</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold mb-2">Error Analysis</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
+              <h4 className="font-semibold mb-2 text-foreground">Error Analysis</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Intrusion Errors (Immediate):</span>
-                  <span>{results.immediateRecall.intrusionErrors.length}</span>
+                  <span className="text-foreground font-medium">{results.immediateRecall.intrusionErrors.length}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Intrusion Errors (Delayed):</span>
-                  <span>{results.delayedRecall.intrusionErrors.length}</span>
+                  <span className="text-foreground font-medium">{results.delayedRecall.intrusionErrors.length}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Perseveration Errors:</span>
-                  <span>{results.immediateRecall.perseverationErrors.length + results.delayedRecall.perseverationErrors.length}</span>
+                  <span className="text-foreground font-medium">{results.immediateRecall.perseverationErrors.length + results.delayedRecall.perseverationErrors.length}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Recognition False Positives:</span>
-                  <span>{results.recognition.falsePositives}</span>
+                  <span className="text-foreground font-medium">{results.recognition.falsePositives}</span>
                 </div>
               </div>
             </div>
-            
+
             <div>
-              <h4 className="font-semibold mb-2">Performance Metrics</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
+              <h4 className="font-semibold mb-2 text-foreground">Performance Metrics</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Learning Efficiency:</span>
-                  <span>{((results.immediateRecall.score / 10) * 100).toFixed(0)}%</span>
+                  <span className="text-foreground font-medium">{((results.immediateRecall.score / 10) * 100).toFixed(0)}%</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Retention Rate:</span>
-                  <span>{results.immediateRecall.score > 0 ? ((results.delayedRecall.score / results.immediateRecall.score) * 100).toFixed(0) : 0}%</span>
+                  <span className="text-foreground font-medium">{results.immediateRecall.score > 0 ? ((results.delayedRecall.score / results.immediateRecall.score) * 100).toFixed(0) : 0}%</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Recognition Accuracy:</span>
-                  <span>{((results.recognition.score / 10) * 100).toFixed(0)}%</span>
+                  <span className="text-foreground font-medium">{((results.recognition.score / 10) * 100).toFixed(0)}%</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between p-2 bg-white/5 rounded">
                   <span>Total Test Duration:</span>
-                  <span>{Math.round(results.totalDuration / 60000)} min</span>
+                  <span className="text-foreground font-medium">{Math.round(results.totalDuration / 60000)} min</span>
                 </div>
               </div>
             </div>
@@ -692,19 +700,20 @@ const ResultsSummary: React.FC<{
       </Card>
 
       {/* Clinical Recommendations */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="w-5 h-5" />
+      {/* Clinical Recommendations */}
+      <Card className="glass-panel border-0">
+        <CardHeader className="bg-white/5 border-b border-white/5">
+          <CardTitle className="flex items-center gap-2 text-foreground">
+            <FileText className="w-5 h-5 text-blue-400" />
             Clinical Recommendations
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <div className="space-y-3">
             {results.interpretation.recommendations.map((recommendation, index) => (
-              <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                <span className="text-sm">{recommendation}</span>
+              <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-blue-500/10 border border-blue-500/10">
+                <CheckCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                <span className="text-sm text-foreground">{recommendation}</span>
               </div>
             ))}
           </div>
@@ -713,11 +722,11 @@ const ResultsSummary: React.FC<{
 
       {/* Action Buttons */}
       <div className="flex gap-4">
-        <Button onClick={onRestart} variant="outline" className="flex-1">
+        <Button onClick={onRestart} variant="outline" className="flex-1 border-white/10 bg-white/5 text-foreground hover:bg-white/10 hover:text-white">
           <RotateCcw className="w-4 h-4 mr-2" />
           Take Test Again
         </Button>
-        <Button onClick={onExport} className="flex-1">
+        <Button onClick={onExport} className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white border-0">
           <FileText className="w-4 h-4 mr-2" />
           Export Report
         </Button>
@@ -733,7 +742,7 @@ export const WordListTest: React.FC = () => {
   const [testWords, setTestWords] = useState<string[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [showWord, setShowWord] = useState(false);
-  
+
   // Results tracking
   const [immediateRecallData, setImmediateRecallData] = useState<RecallData | null>(null);
   const [delayedRecallData, setDelayedRecallData] = useState<RecallData | null>(null);
@@ -741,11 +750,11 @@ export const WordListTest: React.FC = () => {
   const [testStartTime, setTestStartTime] = useState<number>(0);
   const [phaseStartTime, setPhaseStartTime] = useState<number>(0);
   const [testResults, setTestResults] = useState<TestResults | null>(null);
-  
+
   // Speech support
   const [speechSupported, setSpeechSupported] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  
+
   // Refs
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const recognitionRef = useRef<any>(null);
@@ -762,21 +771,21 @@ export const WordListTest: React.FC = () => {
     const categories = [...new Set(WORD_DATABASE.map(item => item.category))];
     const selectedWords: string[] = [];
     const usedCategories: string[] = [];
-    
+
     // Ensure no more than 2 words from same category
     while (selectedWords.length < 10) {
-      const availableWords = WORD_DATABASE.filter(item => 
+      const availableWords = WORD_DATABASE.filter(item =>
         !selectedWords.includes(item.word) &&
         usedCategories.filter(cat => cat === item.category).length < 2
       );
-      
+
       if (availableWords.length === 0) break;
-      
+
       const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
       selectedWords.push(randomWord.word);
       usedCategories.push(randomWord.category);
     }
-    
+
     return selectedWords;
   }, []);
 
@@ -788,7 +797,7 @@ export const WordListTest: React.FC = () => {
     setPhaseStartTime(Date.now());
     setTestPhase('learning');
     setCurrentWordIndex(0);
-    
+
     // Start learning phase
     setTimeout(() => {
       showLearningSequence(words);
@@ -798,22 +807,22 @@ export const WordListTest: React.FC = () => {
   // Show learning sequence
   const showLearningSequence = useCallback((words: string[]) => {
     let index = 0;
-    
+
     const showNextWord = () => {
       if (index < words.length) {
         setCurrentWordIndex(index);
         setShowWord(true);
-        
+
         // Speak word if supported
         if ('speechSynthesis' in window) {
           const utterance = new SpeechSynthesisUtterance(words[index]);
           utterance.rate = 0.8;
           speechSynthesis.speak(utterance);
         }
-        
+
         timeoutRef.current = setTimeout(() => {
           setShowWord(false);
-          
+
           timeoutRef.current = setTimeout(() => {
             index++;
             if (index < words.length) {
@@ -827,23 +836,23 @@ export const WordListTest: React.FC = () => {
         }, 2000);
       }
     };
-    
+
     showNextWord();
   }, []);
 
   // Handle recall submission
   const handleRecallSubmit = (phase: 'immediate' | 'delayed', recalledWords: string[]) => {
     const responseTime = Date.now() - phaseStartTime;
-    const correctWords = recalledWords.filter(word => 
+    const correctWords = recalledWords.filter(word =>
       testWords.some(testWord => testWord.toLowerCase() === word.toLowerCase())
     );
-    const intrusionErrors = recalledWords.filter(word => 
+    const intrusionErrors = recalledWords.filter(word =>
       !testWords.some(testWord => testWord.toLowerCase() === word.toLowerCase())
     );
-    const perseverationErrors = recalledWords.filter((word, index) => 
+    const perseverationErrors = recalledWords.filter((word, index) =>
       recalledWords.indexOf(word) !== index
     );
-    
+
     const recallData: RecallData = {
       phase,
       wordsRecalled: recalledWords,
@@ -853,7 +862,7 @@ export const WordListTest: React.FC = () => {
       responseTime,
       score: correctWords.length
     };
-    
+
     if (phase === 'immediate') {
       setImmediateRecallData(recallData);
       setTestPhase('distractor');
@@ -874,11 +883,11 @@ export const WordListTest: React.FC = () => {
   // Handle recognition test completion
   const handleRecognitionComplete = (results: { selectedWords: string[]; correctCount: number }) => {
     console.log('Recognition complete callback received:', results);
-    
+
     const responseTime = Date.now() - phaseStartTime;
     const falsePositives = results.selectedWords.filter(word => !testWords.includes(word)).length;
     const falseNegatives = testWords.filter(word => !results.selectedWords.includes(word)).length;
-    
+
     const recognitionResults: RecognitionData = {
       correctIdentifications: results.correctCount,
       falsePositives,
@@ -886,9 +895,9 @@ export const WordListTest: React.FC = () => {
       score: results.correctCount,
       responseTime
     };
-    
+
     setRecognitionData(recognitionResults);
-    
+
     // Use a small delay to ensure state updates have completed
     setTimeout(() => {
       generateFinalResults(recognitionResults);
@@ -900,25 +909,25 @@ export const WordListTest: React.FC = () => {
     // Get the latest state values
     const currentImmediate = immediateRecallData;
     const currentDelayed = delayedRecallData;
-    
+
     console.log('Generating final results with data:', { currentImmediate, currentDelayed, recognition });
-    
+
     if (!currentImmediate || !currentDelayed) {
-      console.error('Missing recall data:', { 
-        currentImmediate, 
+      console.error('Missing recall data:', {
+        currentImmediate,
         currentDelayed,
         immediateIsNull: currentImmediate === null,
         delayedIsNull: currentDelayed === null,
         immediateIsUndefined: currentImmediate === undefined,
         delayedIsUndefined: currentDelayed === undefined
       });
-      
+
       // Try again after a short delay
       setTimeout(() => {
         const retryImmediate = immediateRecallData;
         const retryDelayed = delayedRecallData;
         console.log('Retry - recall data:', { retryImmediate, retryDelayed });
-        
+
         if (retryImmediate && retryDelayed) {
           generateFinalResultsWithData(retryImmediate, retryDelayed, recognition);
         } else {
@@ -927,29 +936,29 @@ export const WordListTest: React.FC = () => {
       }, 200);
       return;
     }
-    
+
     generateFinalResultsWithData(currentImmediate, currentDelayed, recognition);
   };
 
   // Helper function to generate results with guaranteed data
   const generateFinalResultsWithData = (immediate: RecallData, delayed: RecallData, recognition: RecognitionData) => {
-    
+
     const totalDuration = Date.now() - testStartTime;
-    
+
     // Interpret results
-    const delayedRecallLevel = 
+    const delayedRecallLevel =
       delayed.score >= 6 ? 'Normal' :
-      delayed.score >= 4 ? 'Mild Concern' : 'High Concern';
-    
+        delayed.score >= 4 ? 'Mild Concern' : 'High Concern';
+
     const recognitionLevel = recognition.score >= 8 ? 'Normal' : 'Impaired';
-    
-    const overallRisk = 
+
+    const overallRisk =
       delayedRecallLevel === 'High Concern' || recognitionLevel === 'Impaired' ? 'High' :
-      delayedRecallLevel === 'Mild Concern' ? 'Medium' : 'Low';
-    
+        delayedRecallLevel === 'Mild Concern' ? 'Medium' : 'Low';
+
     // Generate recommendations
     const recommendations: string[] = [];
-    
+
     if (delayedRecallLevel === 'High Concern') {
       recommendations.push('Urgent neurological evaluation recommended for memory concerns');
       recommendations.push('Consider comprehensive neuropsychological testing');
@@ -957,22 +966,22 @@ export const WordListTest: React.FC = () => {
       recommendations.push('Follow-up memory assessment recommended in 6 months');
       recommendations.push('Consider lifestyle interventions for cognitive health');
     }
-    
+
     if (recognitionLevel === 'Impaired') {
       recommendations.push('Recognition memory impairment detected - clinical evaluation advised');
     }
-    
+
     if (immediate.intrusionErrors.length > 2 || delayed.intrusionErrors.length > 2) {
       recommendations.push('High intrusion error rate - consider attention and executive function assessment');
     }
-    
+
     if (overallRisk === 'Low') {
       recommendations.push('Continue regular cognitive monitoring and healthy lifestyle habits');
     }
-    
+
     recommendations.push('Maintain regular physical exercise and social engagement for cognitive health');
     recommendations.push('Consider Mediterranean diet and adequate sleep for brain health');
-    
+
     const finalResults: TestResults = {
       testWords,
       immediateRecall: immediate,
@@ -986,7 +995,7 @@ export const WordListTest: React.FC = () => {
         recommendations
       }
     };
-    
+
     // Store results using new health data service
     const healthTestResult: HealthTestResult = {
       id: generateTestResultId('word-list-recall'),
@@ -1004,14 +1013,14 @@ export const WordListTest: React.FC = () => {
       duration: totalDuration,
       status: 'final',
     };
-    
+
     saveTestResult(healthTestResult);
-    
+
     // Also save to legacy format for backward compatibility
     const existingResults = JSON.parse(localStorage.getItem('wordListHistory') || '[]');
     existingResults.push({ ...finalResults, timestamp: new Date().toISOString() });
     localStorage.setItem('wordListHistory', JSON.stringify(existingResults));
-    
+
     setTestResults(finalResults);
     setTestPhase('results');
   };
@@ -1019,7 +1028,7 @@ export const WordListTest: React.FC = () => {
   // Export results
   const exportResults = () => {
     if (!testResults) return;
-    
+
     const dataStr = JSON.stringify(testResults, null, 2);
     const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
@@ -1087,7 +1096,7 @@ export const WordListTest: React.FC = () => {
                   You'll see 10 words displayed one at a time for 2 seconds each. Try to remember all of them.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">2</span>
@@ -1097,7 +1106,7 @@ export const WordListTest: React.FC = () => {
                   Right after seeing all words, you'll type all the words you remember.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">3</span>
@@ -1107,7 +1116,7 @@ export const WordListTest: React.FC = () => {
                   You'll complete a simple counting task to clear your short-term memory.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">4</span>
@@ -1117,7 +1126,7 @@ export const WordListTest: React.FC = () => {
                   After the distractor task, you'll recall the original words again.
                 </p>
               </div>
-              
+
               <div>
                 <h4 className="font-semibold flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-sm flex items-center justify-center">5</span>
@@ -1128,14 +1137,14 @@ export const WordListTest: React.FC = () => {
                 </p>
               </div>
             </div>
-            
+
             <div className="bg-muted/50 p-4 rounded-lg">
               <p className="text-sm">
-                <strong>Important:</strong> This test takes about 15-20 minutes total. 
+                <strong>Important:</strong> This test takes about 15-20 minutes total.
                 The delayed recall score is the most important measure for Alzheimer's screening.
               </p>
             </div>
-            
+
             <Button onClick={startTest} size="lg" className="w-full">
               <Play className="w-4 h-4 mr-2" />
               Start Memory Test
@@ -1173,7 +1182,7 @@ export const WordListTest: React.FC = () => {
       {(testPhase === 'immediate-recall' || testPhase === 'delayed-recall') && (
         <RecallInput
           onSubmit={(words) => handleRecallSubmit(
-            testPhase === 'immediate-recall' ? 'immediate' : 'delayed', 
+            testPhase === 'immediate-recall' ? 'immediate' : 'delayed',
             words
           )}
           phase={testPhase === 'immediate-recall' ? 'immediate' : 'delayed'}

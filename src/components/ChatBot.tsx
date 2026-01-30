@@ -207,7 +207,8 @@ ${languageInstruction}
 Please provide a helpful, accurate response about health screening, cardiovascular tests, voice analysis, motor function tests, eye/cognitive assessments, or mental health screening. Keep responses concise but informative. Remember: ${languageInstruction}`;
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      // Using gemini-flash-latest for better stability and quota management
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -221,8 +222,14 @@ Please provide a helpful, accurate response about health screening, cardiovascul
         })
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Gemini API Error:', response.status, response.statusText, errorData);
+        throw new Error(`API Error: ${response.status} ${errorData.error?.message || response.statusText}`);
+      }
+
       const data = await response.json();
-      const botResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I apologize, but I encountered an error. Please try again.';
+      const botResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I apologize, but I encountered an error receiving a valid response. Please try again.';
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -244,7 +251,7 @@ Please provide a helpful, accurate response about health screening, cardiovascul
         } else if (error.message.includes('network') || error.message.includes('fetch')) {
           errorContent += 'Please check your internet connection and try again.';
         } else {
-          errorContent += 'Please check your API configuration and try again.';
+          errorContent += `Error: ${error.message}`;
         }
       } else {
         errorContent += 'Please check your API configuration and try again.';
@@ -325,8 +332,8 @@ Please provide a helpful, accurate response about health screening, cardiovascul
 
                 <div
                   className={`max-w-[80%] p-3 rounded-2xl ${message.sender === 'user'
-                      ? 'bg-purple-500/20 text-white ml-auto'
-                      : 'bg-gray-800/50 text-gray-100'
+                    ? 'bg-purple-500/20 text-white ml-auto'
+                    : 'bg-gray-800/50 text-gray-100'
                     }`}
                 >
                   <div className="text-sm leading-relaxed prose prose-invert">

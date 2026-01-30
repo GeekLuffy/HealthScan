@@ -121,21 +121,21 @@ function invNorm(p: number) {
   const plow = 0.02425, phigh = 1 - plow;
   let q, r;
   if (p < plow) {
-      q = Math.sqrt(-2 * Math.log(p));
-      return (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6)
-            / (((((d1 * q + d2) * q + d3) * q + d4) * q + 1));
+    q = Math.sqrt(-2 * Math.log(p));
+    return (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6)
+      / (((((d1 * q + d2) * q + d3) * q + d4) * q + 1));
   }
 
   if (phigh < p) {
-      q = Math.sqrt(-2 * Math.log(1 - p));
-      return -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6)
-            / (((((d1 * q + d2) * q + d3) * q + d4) * q + 1));
+    q = Math.sqrt(-2 * Math.log(1 - p));
+    return -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6)
+      / (((((d1 * q + d2) * q + d3) * q + d4) * q + 1));
   }
 
   q = p - 0.5;
   r = q * q;
   return ((((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q)
-        / ((((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1));
+    / ((((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1));
 }
 
 // Advanced Clinical Analysis Functions
@@ -214,10 +214,10 @@ function assessCognitiveDiseaseRisk(testType: string, avgRT: number | null, accu
   if (testType === 'saccade' && avgRT !== null && avgRT > 600) {
     const riskFactors = [];
     const clinicalMarkers = [];
-    
+
     if (avgRT > 800) riskFactors.push("Significantly delayed saccadic initiation");
     if (accuracy < 80) riskFactors.push("Reduced oculomotor precision");
-    
+
     clinicalMarkers.push("Oculomotor dysfunction");
     if (avgRT > 1000) clinicalMarkers.push("Severe bradykinesia markers");
 
@@ -234,10 +234,10 @@ function assessCognitiveDiseaseRisk(testType: string, avgRT: number | null, accu
   if (testType === 'stroop' && accuracy < 75) {
     const riskFactors = [];
     const clinicalMarkers = [];
-    
+
     if (accuracy < 75) riskFactors.push("Impaired cognitive accuracy");
     if (testType === 'stroop' && avgRT !== null && avgRT > 1500) riskFactors.push("Executive dysfunction");
-    
+
     clinicalMarkers.push("Cognitive decline markers");
 
     assessments.push({
@@ -253,10 +253,10 @@ function assessCognitiveDiseaseRisk(testType: string, avgRT: number | null, accu
   if (testType === 'stroop' && avgRT !== null) {
     const riskFactors = [];
     const clinicalMarkers = [];
-    
+
     if (avgRT > 1500) riskFactors.push("Prolonged interference resolution");
     if (accuracy < 80) riskFactors.push("Attention and inhibition deficits");
-    
+
     clinicalMarkers.push("Executive function impairment");
     clinicalMarkers.push("Cognitive control difficulties");
 
@@ -289,10 +289,10 @@ function analyzeCognitiveCharacteristics(testType: string, avgRT: number | null,
       processingSpeed = Math.max(0, Math.min(100, 100 - (avgRT - 200) / 10));
       attentionalControl = Math.max(0, Math.min(100, 100 - (avgRT - 300) / 8));
     }
-    
+
     // Executive function based on accuracy
     executiveFunction = Math.max(0, Math.min(100, accuracy + 10));
-    
+
   } else if (testType === 'stroop') {
     // Executive function and cognitive control
     if (avgRT !== null) {
@@ -300,10 +300,10 @@ function analyzeCognitiveCharacteristics(testType: string, avgRT: number | null,
       responseInhibition = Math.max(0, Math.min(100, 100 - (avgRT - 900) / 12));
       cognitiveFlexibility = Math.max(0, Math.min(100, 100 - (avgRT - 1000) / 10));
     }
-    
+
     attentionalControl = Math.max(0, Math.min(100, accuracy + 5));
     processingSpeed = Math.max(0, Math.min(100, accuracy));
-    
+
   }
 
   return {
@@ -350,7 +350,7 @@ function generateCognitiveRecommendations(findings: CognitiveClinicalFinding[], 
   if (characteristics.executiveFunction < 50) {
     recommendations.push("Executive function training and cognitive behavioral interventions");
   }
-  
+
   if (characteristics.processingSpeed < 50) {
     recommendations.push("Processing speed enhancement through targeted cognitive exercises");
   }
@@ -362,7 +362,7 @@ function generateCognitiveRecommendations(findings: CognitiveClinicalFinding[], 
   // General recommendations
   recommendations.push("Regular cognitive monitoring and follow-up assessments");
   recommendations.push("Maintain healthy sleep, exercise, and nutrition habits for optimal cognitive function");
-  
+
   if (recommendations.length === 2) { // Only general recommendations
     recommendations.unshift("Continue regular cognitive assessments to maintain current performance levels");
   }
@@ -397,10 +397,10 @@ export const EyeLab: React.FC = () => {
   const testActive = useRef<boolean>(false);
   const responseTaken = useRef<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  
+
   // Refs for pre-generated trial data
-  const saccadeTrials = useRef<{x: number, y: number}[]>([]);
-  const stroopTrials = useRef<{word: string, color: string}[]>([]);
+  const saccadeTrials = useRef<{ x: number, y: number }[]>([]);
+  const stroopTrials = useRef<{ word: string, color: string }[]>([]);
   const currentTestResults = useRef<TrialResult[]>([]);
 
   // -------- Configs --------
@@ -455,7 +455,7 @@ export const EyeLab: React.FC = () => {
     setTestPhase('complete');
     setStatus('Test complete! Generating comprehensive cognitive analysis...');
     setSessionResults(prev => ({ ...prev, [testType]: currentTestResults.current }));
-    
+
     // Generate advanced analysis after a short delay
     setTimeout(() => {
       generateAdvancedAnalysis(testType, currentTestResults.current);
@@ -599,58 +599,58 @@ export const EyeLab: React.FC = () => {
   // Generate advanced analysis
   const generateAdvancedAnalysis = useCallback((testType: string, results: TrialResult[]) => {
     setStatus("Processing cognitive data and generating advanced clinical analysis...");
-    
+
     setTimeout(() => {
       const rts = results.map(r => r.rt).filter((x): x is number => typeof x === 'number');
-      
+
       // Use robust statistics for improved accuracy
       const rtStats = robustStatistics(rts, true);
       const rtQuality = validateDataQuality(rts, 5, 40);
-      
+
       // Use trimmed mean for reaction time (more robust to outliers)
       const localAvgRT = rtStats.sampleCount > 0 ? rtStats.trimmedMean : null;
       const localAccuracy = (results.filter(t => t.correct).length / results.length) * 100;
-      
+
       // Calculate d-prime if we have hit/miss data
       let dPrime = null;
 
       // Generate clinical findings
       const clinicalFindings = generateCognitiveClinicalFindings(testType, localAvgRT, localAccuracy, dPrime);
-      
+
       // Assess disease risk
       const diseaseRiskAssessment = assessCognitiveDiseaseRisk(testType, localAvgRT, localAccuracy, dPrime);
-      
+
       // Analyze cognitive characteristics
       const cognitiveCharacteristics = analyzeCognitiveCharacteristics(testType, localAvgRT, localAccuracy, dPrime);
-      
+
       // Generate recommendations
       const recommendations = generateCognitiveRecommendations(clinicalFindings, diseaseRiskAssessment, cognitiveCharacteristics);
-      
+
       // Calculate overall quality score using improved accuracy metrics
       const accuracyScore = calculateAccuracyScore(rtStats, rtQuality);
       let qualityScore = Math.max(70, accuracyScore); // Use accuracy score as base
-      
+
       if (localAccuracy >= 90) qualityScore += 15;
       else if (localAccuracy >= 80) qualityScore += 8;
       else if (localAccuracy < 60) qualityScore -= 20;
-      
+
       if (localAvgRT !== null) {
         if (testType === 'saccade' && localAvgRT < 400) qualityScore += 10;
         else if (testType === 'stroop' && localAvgRT < 1200) qualityScore += 10;
       }
-      
+
       if (dPrime !== null && dPrime > 1.5) qualityScore += 15;
-      
+
       // Boost score for good data quality
       if (rtQuality.qualityScore >= 90) qualityScore += 5;
       else if (rtQuality.qualityScore < 70) qualityScore -= 10;
-      
+
       qualityScore = Math.max(0, Math.min(100, qualityScore));
-      
+
       // Determine risk level
-      const riskLevel: 'Low' | 'Medium' | 'High' = 
+      const riskLevel: 'Low' | 'Medium' | 'High' =
         diseaseRiskAssessment.some(r => r.riskLevel === 'High') ? 'High' :
-        diseaseRiskAssessment.some(r => r.riskLevel === 'Medium') ? 'Medium' : 'Low';
+          diseaseRiskAssessment.some(r => r.riskLevel === 'Medium') ? 'Medium' : 'Low';
 
       const analysisResult: EyeAnalysisResults = {
         timestamp: new Date().toISOString(),
@@ -668,7 +668,7 @@ export const EyeLab: React.FC = () => {
 
       setAnalysisResults(analysisResult);
       setStatus('Advanced cognitive analysis complete!');
-      
+
       // Save to unified health data storage (only for saccade and stroop tests)
       if (testType === 'saccade' || testType === 'stroop') {
         try {
@@ -694,7 +694,7 @@ export const EyeLab: React.FC = () => {
           console.error(`Error saving ${testType} test result:`, error);
         }
       }
-      
+
       // Auto-scroll to report
       setTimeout(() => {
         reportRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -748,12 +748,12 @@ export const EyeLab: React.FC = () => {
     const localAvgRt = mean(rts);
     const localAccuracy = (results.filter(t => t.correct).length / results.length) * 100;
     const localCounts = {
-        hits: results.filter(t => t.type === 'hit').length,
-        misses: results.filter(t => t.type === 'miss').length,
-        fas: results.filter(t => t.type === 'false_alarm').length,
-        crs: results.filter(t => t.type === 'correct_rejection').length,
+      hits: results.filter(t => t.type === 'hit').length,
+      misses: results.filter(t => t.type === 'miss').length,
+      fas: results.filter(t => t.type === 'false_alarm').length,
+      crs: results.filter(t => t.type === 'correct_rejection').length,
     };
-    
+
     let dPrime = null;
 
     const summary: TestSummary = {
@@ -818,18 +818,19 @@ export const EyeLab: React.FC = () => {
   const avgRTDisplay = avgRT ? Math.round(avgRT) : 0;
 
   return (
-    <div className="space-y-8 pt-24 bg-gradient-to-b from-blue-50 via-white to-green-50 min-h-screen pb-12">
-      
+    <div className="space-y-8 pt-24 min-h-screen pb-12">
+
       {/* Header */}
-      <div className="text-center space-y-4 bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-600 max-w-4xl mx-auto">
+      <div className="text-center space-y-4 glass-panel p-6 relative overflow-hidden max-w-4xl mx-auto">
+        <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/50"></div>
         <div className="flex items-center justify-center gap-3 mb-2">
-          <Eye className="w-8 h-8 text-indigo-600" />
-          <h1 className="text-4xl font-bold text-gray-900">Eye & Cognition Lab</h1>
+          <Eye className="w-8 h-8 text-indigo-400" />
+          <h1 className="text-4xl font-bold text-foreground">Eye & Cognition Lab</h1>
         </div>
-        <p className="text-lg text-gray-700">
+        <p className="text-lg text-muted-foreground">
           Validated micro-assessments for reaction time, attention, and working memory.
         </p>
-        <Badge className="bg-indigo-600 text-white mt-2 flex items-center gap-2 w-fit mx-auto">
+        <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/20 mt-2 flex items-center gap-2 w-fit mx-auto">
           <Brain className="w-3 h-3" /> Cognitive Battery
         </Badge>
       </div>
@@ -842,122 +843,127 @@ export const EyeLab: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Test Area */}
-            <Card className="bg-white shadow-md border-l-4 border-blue-600">
-              <CardHeader>
+            <Card className="glass-panel border-0 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+              <CardHeader className="bg-white/5 border-b border-white/5">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-gray-900 capitalize flex items-center gap-2">
-                    {currentTest === 'saccade' && <Target className="w-5 h-5" />} 
-                    {currentTest === 'stroop' && <Brain className="w-5 h-5" />} 
+                  <CardTitle className="text-foreground capitalize flex items-center gap-2">
+                    {currentTest === 'saccade' && <Target className="w-5 h-5 text-blue-400" />}
+                    {currentTest === 'stroop' && <Brain className="w-5 h-5 text-blue-400" />}
                     {currentTest} Test
                   </CardTitle>
                   <div className="flex gap-2">
                     {testPhase === 'running' || testPhase === 'complete' ? (
-                      <Button variant="outline" size="sm" onClick={resetTest}><Square className="w-4 h-4 mr-1"/>Exit</Button>
+                      <Button variant="outline" size="sm" onClick={resetTest} className="border-white/10 hover:bg-white/5 text-muted-foreground hover:text-foreground"><Square className="w-4 h-4 mr-1" />Exit</Button>
                     ) : null}
                   </div>
                 </div>
-                <CardDescription className="text-gray-600">{status}</CardDescription>
-              </CardHeader>
-            <CardContent className="space-y-6">
-              {testPhase === 'running' && (
-                <div className="space-y-3">
-                  <Progress value={testProgress} />
-                  <p className="text-sm text-gray-600 text-center font-medium">Trial {currentTrial} of {totalTrials}</p>
-                </div>
-              )}
-
-              <div
-                ref={containerRef}
-                className="relative bg-gray-100 rounded-lg aspect-video select-none border-2 border-gray-200"
-                onClick={onSaccadeClick}
-              >
-                {/* Saccade */}
-                {currentTest === 'saccade' && saccadeTarget.visible && (
-                  <div
-                    className="absolute w-6 h-6 rounded-full bg-destructive/90 shadow"
-                    style={{ left: `${saccadeTarget.x}%`, top: `${saccadeTarget.y}%`, transform: 'translate(-50%, -50%)' }}
-                    aria-label="Saccade target"
-                  />
-                )}
-
-                {/* Stroop */}
-                {currentTest === 'stroop' && stroopStimulus.word && testPhase === 'running' && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center space-y-6">
-                      <div className="text-6xl font-bold" style={{ color: stroopStimulus.color }}>
-                        {stroopStimulus.word.toUpperCase()}
-                      </div>
-                      <div className="flex gap-3 justify-center">
-                        {['red','blue','green','yellow'].map(c => (
-                          <Button key={c} variant="outline" onClick={() => onStroopAnswer(c)} className="text-base px-6 py-3 font-semibold border-2" style={{ backgroundColor: c, color: 'white', borderColor: c }}>
-                            {c}
-                          </Button>
-                        ))}
-                      </div>
-                      <p className="text-sm text-gray-600 font-medium">Shortcuts: R / B / G / Y</p>
-                    </div>
-                  </div>
-                )}
-
-
-                {/* States */}
-                {testPhase === 'instructions' && (
-                  <div className="absolute inset-0 grid place-items-center">
-                    <div className="text-center p-8">
-                      <Brain className="w-16 h-16 mx-auto mb-4 animate-pulse text-indigo-600" />
-                      <p className="text-xl font-semibold text-gray-900 mb-2">Get ready…</p>
-                      <p className="text-sm text-gray-600">Starting in 4 seconds</p>
-                    </div>
-                  </div>
-                )}
-                 {testPhase === 'complete' && (
-                  <div className="absolute inset-0 grid place-items-center">
-                    <div className="text-center p-8">
-                      <TrendingUp className="w-16 h-16 mx-auto mb-4 text-green-600" />
-                      <p className="text-xl font-semibold text-gray-900 mb-2">Test Complete</p>
-                      <p className="text-sm text-gray-600">Check your results below</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-            {/* Results */}
-            <Card className="bg-white shadow-md border-l-4 border-green-600">
-              <CardHeader>
-                <CardTitle className="text-gray-900 flex items-center gap-2"><TrendingUp className="w-5 h-5"/> Real-time Results</CardTitle>
-                <CardDescription className="text-gray-600">Objective performance metrics</CardDescription>
+                <CardDescription className="text-muted-foreground">{status}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                {testPhase === 'running' && (
+                  <div className="space-y-3">
+                    <Progress value={testProgress} className="h-2 bg-white/10" indicatorClassName="bg-blue-500" />
+                    <p className="text-sm text-muted-foreground text-center font-medium">Trial {currentTrial} of {totalTrials}</p>
+                  </div>
+                )}
+
+                <div
+                  ref={containerRef}
+                  className="relative bg-black/40 rounded-lg aspect-video select-none border border-white/10 overflow-hidden"
+                  onClick={onSaccadeClick}
+                >
+                  {/* Saccade */}
+                  {currentTest === 'saccade' && saccadeTarget.visible && (
+                    <div
+                      className="absolute w-6 h-6 rounded-full bg-destructive/90 shadow"
+                      style={{ left: `${saccadeTarget.x}%`, top: `${saccadeTarget.y}%`, transform: 'translate(-50%, -50%)' }}
+                      aria-label="Saccade target"
+                    />
+                  )}
+
+                  {/* Stroop */}
+                  {currentTest === 'stroop' && stroopStimulus.word && testPhase === 'running' && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center space-y-6">
+                        <div className="text-6xl font-bold filter drop-shadow-lg" style={{ color: stroopStimulus.color }}>
+                          {stroopStimulus.word.toUpperCase()}
+                        </div>
+                        <div className="flex gap-3 justify-center">
+                          {['red', 'blue', 'green', 'yellow'].map(c => (
+                            <Button key={c} variant="outline" onClick={() => onStroopAnswer(c)} className="text-base px-6 py-3 font-semibold border-2 hover:brightness-110 transition-all" style={{ backgroundColor: `${c === 'yellow' ? '#EAB308' : c}`, color: 'white', borderColor: 'transparent' }}>
+                              {c}
+                            </Button>
+                          ))}
+                        </div>
+                        <p className="text-sm text-muted-foreground font-medium">Shortcuts: R / B / G / Y</p>
+                      </div>
+                    </div>
+                  )}
+
+
+                  {/* States */}
+                  {testPhase === 'instructions' && (
+                    <div className="absolute inset-0 grid place-items-center">
+                      <div className="text-center p-8">
+                        <Brain className="w-16 h-16 mx-auto mb-4 animate-pulse text-indigo-400" />
+                        <p className="text-xl font-semibold text-foreground mb-2">Get ready…</p>
+                        <p className="text-sm text-muted-foreground">Starting in 4 seconds</p>
+                      </div>
+                    </div>
+                  )}
+                  {testPhase === 'complete' && (
+                    <div className="absolute inset-0 grid place-items-center">
+                      <div className="text-center p-8">
+                        <TrendingUp className="w-16 h-16 mx-auto mb-4 text-green-400" />
+                        <p className="text-xl font-semibold text-foreground mb-2">Test Complete</p>
+                        <p className="text-sm text-muted-foreground">Check your results below</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Results */}
+            <Card className="glass-panel border-0 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-green-500/50"></div>
+              <CardHeader className="bg-white/5 border-b border-white/5">
+                <CardTitle className="text-foreground flex items-center gap-2"><TrendingUp className="w-5 h-5 text-green-400" /> Real-time Results</CardTitle>
+                <CardDescription className="text-muted-foreground">Objective performance metrics</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6 pt-6">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-5 rounded-lg bg-blue-50 border border-blue-200">
-                    <div className="text-sm font-medium text-gray-600 mb-2">Avg RT</div>
-                    <div className="text-3xl font-bold text-blue-600">{avgRTDisplay} ms</div>
+                  <div className="text-center p-5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                    <div className="text-sm font-medium text-blue-200 mb-2">Avg RT</div>
+                    <div className="text-3xl font-bold text-blue-400">{avgRTDisplay} ms</div>
                   </div>
-                  <div className="text-center p-5 rounded-lg bg-green-50 border border-green-200">
-                    <div className="text-sm font-medium text-gray-600 mb-2">Accuracy</div>
-                    <div className="text-3xl font-bold text-green-600">{accuracy.toFixed(0)}%</div>
+                  <div className="text-center p-5 rounded-lg bg-green-500/10 border border-green-500/20">
+                    <div className="text-sm font-medium text-green-200 mb-2">Accuracy</div>
+                    <div className="text-3xl font-bold text-green-400">{accuracy.toFixed(0)}%</div>
                   </div>
-                  <div className="text-center p-5 rounded-lg bg-purple-50 border border-purple-200">
-                    <div className="text-sm font-medium text-gray-600 mb-2">Hits / Misses</div>
-                    <div className="text-3xl font-bold text-purple-600">{counts.hits} / {counts.misses}</div>
+                  <div className="text-center p-5 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                    <div className="text-sm font-medium text-purple-200 mb-2">Hits / Misses</div>
+                    <div className="text-3xl font-bold text-purple-400">{counts.hits} / {counts.misses}</div>
                   </div>
-                  <div className="text-center p-5 rounded-lg bg-orange-50 border border-orange-200">
-                    <div className="text-sm font-medium text-gray-600 mb-2">False Alarms</div>
-                    <div className="text-3xl font-bold text-orange-600">{counts.fas}</div>
+                  <div className="text-center p-5 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                    <div className="text-sm font-medium text-orange-200 mb-2">False Alarms</div>
+                    <div className="text-3xl font-bold text-orange-400">{counts.fas}</div>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="text-sm font-medium text-gray-700 mb-3">Reaction Time Trend</div>
-                  <div className="h-48 bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="text-sm font-medium text-foreground mb-3">Reaction Time Trend</div>
+                  <div className="h-48 bg-white/5 rounded-lg border border-white/10 p-4">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={chartData} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <XAxis dataKey="trial" tickLine={false} axisLine={false} stroke="#6b7280" />
-                        <YAxis tickLine={false} axisLine={false} stroke="#6b7280" />
-                        <Tooltip formatter={(v: any) => [`${v} ms`, 'RT']} />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
+                        <XAxis dataKey="trial" tickLine={false} axisLine={false} stroke="#9ca3af" />
+                        <YAxis tickLine={false} axisLine={false} stroke="#9ca3af" />
+                        <Tooltip
+                          formatter={(v: any) => [`${v} ms`, 'RT']}
+                          contentStyle={{ backgroundColor: '#1e1e1e', border: '1px solid #333', color: '#fff' }}
+                        />
                         <Line type="monotone" dataKey="rt" dot={false} strokeWidth={2} stroke="#3b82f6" />
                       </LineChart>
                     </ResponsiveContainer>
@@ -965,11 +971,11 @@ export const EyeLab: React.FC = () => {
                 </div>
 
                 <div className="flex gap-3 pt-2">
-                  <Button variant="outline" className="flex-1" onClick={() => generateReport(currentTest, trialResults)} disabled={testPhase !== 'complete'}>
-                    <FileText className="w-4 h-4 mr-2"/> Generate Report
+                  <Button variant="outline" className="flex-1 border-white/10 bg-white/5 hover:bg-white/10 text-foreground" onClick={() => generateReport(currentTest, trialResults)} disabled={testPhase !== 'complete'}>
+                    <FileText className="w-4 h-4 mr-2" /> Generate Report
                   </Button>
-                  <Button variant="outline" className="flex-1" onClick={() => startTest(currentTest)}>
-                    <RefreshCw className="w-4 h-4 mr-2"/> Restart Test
+                  <Button variant="outline" className="flex-1 border-white/10 bg-white/5 hover:bg-white/10 text-foreground" onClick={() => startTest(currentTest)}>
+                    <RefreshCw className="w-4 h-4 mr-2" /> Restart Test
                   </Button>
                 </div>
               </CardContent>
@@ -980,110 +986,121 @@ export const EyeLab: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {tests.map(({ id, title, description, icon: Icon }) => (
-              <Card key={id} className="bg-white shadow-md border-l-4 border-indigo-600 group cursor-pointer hover:shadow-lg transition-shadow" onClick={() => startTest(id as TestType)}>
-                <CardHeader className="text-center pb-4">
-                  <Icon className="w-16 h-16 mx-auto mb-4 text-indigo-600" />
-                  <CardTitle className="text-gray-900 group-hover:text-indigo-600 transition-colors text-lg">{title}</CardTitle>
-                  <CardDescription className="text-gray-600 mt-2">{description}</CardDescription>
+              <Card key={id} className="glass-panel border-0 relative overflow-hidden group cursor-pointer hover:scale-[1.02] transition-all duration-300" onClick={() => startTest(id as TestType)}>
+                <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/50"></div>
+                <CardHeader className="text-center pb-4 z-10 relative">
+                  <div className="p-3 bg-indigo-500/10 rounded-2xl w-fit mx-auto mb-4 border border-indigo-500/20">
+                    <Icon className="w-8 h-8 text-indigo-400 group-hover:scale-110 transition-transform" />
+                  </div>
+                  <CardTitle className="text-foreground group-hover:text-indigo-400 transition-colors text-lg">{title}</CardTitle>
+                  <CardDescription className="text-muted-foreground mt-2">{description}</CardDescription>
                 </CardHeader>
-                <CardContent className="pt-0 pb-6">
-                  <Button className="w-full bg-indigo-600 hover:bg-indigo-700">Start Test</Button>
+                <CardContent className="pt-0 pb-6 z-10 relative">
+                  <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-900/20">Start Test</Button>
                 </CardContent>
               </Card>
             ))}
 
-          {/* If any prior test completed, offer a combined export */}
-          {(sessionResults.saccade.length > 0 || sessionResults.stroop.length > 0 || sessionResults.digitspan.length > 0 || sessionResults.wordlist.length > 0) && (
-            <Card className="bg-white shadow-md border-l-4 border-purple-600 mt-6">
-              <CardHeader>
-                <CardTitle className="text-gray-900 flex items-center gap-2"><FileText className="w-5 h-5"/> Export Past Results</CardTitle>
-                <CardDescription className="text-gray-600">Download the most recent results from each test</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-3">
-                  {(['saccade','stroop','digitspan','wordlist'] as const).map(key => (
-                    sessionResults[key].length > 0 ? (
-                      <Button key={key} variant="outline" onClick={() => generateReport(key, sessionResults[key])} className="border-gray-300 text-gray-700 hover:bg-gray-50">
-                        Download {key} report
-                      </Button>
-                    ) : null
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+            {/* If any prior test completed, offer a combined export */}
+            {(sessionResults.saccade.length > 0 || sessionResults.stroop.length > 0 || sessionResults.digitspan.length > 0 || sessionResults.wordlist.length > 0) && (
+              <Card className="glass-panel border-0 mt-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-purple-500/50"></div>
+                <CardHeader className="bg-white/5 border-b border-white/5">
+                  <CardTitle className="text-foreground flex items-center gap-2"><FileText className="w-5 h-5 text-purple-400" /> Export Past Results</CardTitle>
+                  <CardDescription className="text-muted-foreground">Download the most recent results from each test</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="flex flex-wrap gap-3">
+                    {(['saccade', 'stroop', 'digitspan', 'wordlist'] as const).map(key => (
+                      sessionResults[key].length > 0 ? (
+                        <Button key={key} variant="outline" onClick={() => generateReport(key, sessionResults[key])} className="border-white/10 bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-foreground">
+                          Download {key} report
+                        </Button>
+                      ) : null
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
       )}
 
       {/* Advanced Analysis Report - Inline below test blocks */}
       {analysisResults && (
         <div ref={reportRef} className="max-w-6xl mx-auto px-4 space-y-8 mt-12">
-          <div className="text-center bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-600">
-            <h2 className="text-3xl font-bold text-gray-900 mb-3">Comprehensive Cognitive Analysis Report</h2>
-            <p className="text-lg text-gray-700">Advanced clinical assessment for {analysisResults.testType} test</p>
+          <div className="text-center glass-panel p-6 border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-purple-500/50"></div>
+            <h2 className="text-3xl font-bold text-foreground mb-3">Comprehensive Cognitive Analysis Report</h2>
+            <p className="text-lg text-muted-foreground">Advanced clinical assessment for {analysisResults.testType} test</p>
           </div>
 
           {/* Summary Overview */}
-          <Card className="bg-white shadow-md border-l-4 border-blue-600">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <Brain className="w-5 h-5" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Brain className="w-5 h-5 text-blue-400" />
                 Assessment Summary
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="text-center p-6 rounded-lg bg-blue-50 border border-blue-200">
-                  <div className="text-sm font-medium text-gray-600 mb-2">Overall Quality</div>
-                  <div className="text-3xl font-bold text-blue-600 mb-3">{analysisResults.qualityScore}/100</div>
-                  <Badge className={analysisResults.qualityScore >= 80 ? "bg-green-600 text-white" : analysisResults.qualityScore >= 60 ? "bg-yellow-500 text-white" : "bg-red-600 text-white"}>
+                <div className="text-center p-6 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="text-sm font-medium text-blue-200 mb-2">Overall Quality</div>
+                  <div className="text-3xl font-bold text-blue-400 mb-3">{analysisResults.qualityScore}/100</div>
+                  <Badge className={analysisResults.qualityScore >= 80 ? "bg-green-500/20 text-green-400 hover:bg-green-500/30" : analysisResults.qualityScore >= 60 ? "bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30" : "bg-red-500/20 text-red-400 hover:bg-red-500/30"}>
                     {analysisResults.qualityScore >= 80 ? "Excellent" : analysisResults.qualityScore >= 60 ? "Good" : "Needs Improvement"}
                   </Badge>
                 </div>
-                <div className="text-center p-6 rounded-lg bg-green-50 border border-green-200">
-                  <div className="text-sm font-medium text-gray-600 mb-2">Risk Level</div>
-                  <div className="text-3xl font-bold text-green-600 mb-3">{analysisResults.riskLevel}</div>
-                  <Badge className={analysisResults.riskLevel === 'Low' ? "bg-green-600 text-white" : analysisResults.riskLevel === 'Medium' ? "bg-yellow-500 text-white" : "bg-red-600 text-white"}>
-                    {analysisResults.riskLevel === 'Low' ? <CheckCircle className="w-3 h-3 mr-1" /> : 
-                     analysisResults.riskLevel === 'Medium' ? <AlertTriangle className="w-3 h-3 mr-1" /> : 
-                     <XCircle className="w-3 h-3 mr-1" />}
+                <div className="text-center p-6 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <div className="text-sm font-medium text-green-200 mb-2">Risk Level</div>
+                  <div className="text-3xl font-bold text-green-400 mb-3">{analysisResults.riskLevel}</div>
+                  <Badge className={
+                    analysisResults.riskLevel === 'Low' ? "bg-green-500/20 text-green-400 hover:bg-green-500/30" :
+                      analysisResults.riskLevel === 'Medium' ? "bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30" :
+                        "bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                  }>
+                    {analysisResults.riskLevel === 'Low' ? <CheckCircle className="w-3 h-3 mr-1" /> :
+                      analysisResults.riskLevel === 'Medium' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
+                        <XCircle className="w-3 h-3 mr-1" />}
                     {analysisResults.riskLevel} Risk
                   </Badge>
                 </div>
-                <div className="text-center p-6 rounded-lg bg-purple-50 border border-purple-200">
-                  <div className="text-sm font-medium text-gray-600 mb-2">Avg Reaction Time</div>
-                  <div className="text-3xl font-bold text-purple-600">{Math.round(analysisResults.avgReactionTime)}ms</div>
+                <div className="text-center p-6 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                  <div className="text-sm font-medium text-purple-200 mb-2">Avg Reaction Time</div>
+                  <div className="text-3xl font-bold text-purple-400">{Math.round(analysisResults.avgReactionTime)}ms</div>
                 </div>
-                <div className="text-center p-6 rounded-lg bg-orange-50 border border-orange-200">
-                  <div className="text-sm font-medium text-gray-600 mb-2">Accuracy</div>
-                  <div className="text-3xl font-bold text-orange-600">{analysisResults.accuracy.toFixed(1)}%</div>
+                <div className="text-center p-6 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                  <div className="text-sm font-medium text-orange-200 mb-2">Accuracy</div>
+                  <div className="text-3xl font-bold text-orange-400">{analysisResults.accuracy.toFixed(1)}%</div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Cognitive Characteristics */}
-          <Card className="bg-white shadow-md border-l-4 border-green-600">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <Activity className="w-5 h-5" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-green-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Activity className="w-5 h-5 text-green-400" />
                 Cognitive Profile
               </CardTitle>
-              <CardDescription className="text-gray-600">Detailed assessment of cognitive functions</CardDescription>
+              <CardDescription className="text-muted-foreground">Detailed assessment of cognitive functions</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Object.entries(analysisResults.cognitiveCharacteristics).map(([key, value]) => {
                   const displayName = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
                   return (
-                    <div key={key} className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div key={key} className="space-y-3 p-4 bg-white/5 rounded-lg border border-white/10">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-gray-900">{displayName}</span>
-                        <span className="text-sm font-semibold text-gray-700">{value}/100</span>
+                        <span className="text-sm font-medium text-foreground">{displayName}</span>
+                        <span className="text-sm font-semibold text-muted-foreground">{value}/100</span>
                       </div>
-                      <Progress value={value} className="h-3" />
-                      <div className="text-xs font-medium text-gray-600">
+                      <Progress value={value} className="h-3 bg-white/10" indicatorClassName={value >= 80 ? "bg-green-500" : value >= 60 ? "bg-yellow-500" : "bg-red-500"} />
+                      <div className="text-xs font-medium text-muted-foreground/80">
                         {value >= 80 ? "Excellent" : value >= 60 ? "Good" : value >= 40 ? "Fair" : "Needs Improvement"}
                       </div>
                     </div>
@@ -1094,36 +1111,37 @@ export const EyeLab: React.FC = () => {
           </Card>
 
           {/* Clinical Findings */}
-          <Card className="bg-white shadow-md border-l-4 border-purple-600">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <FileText className="w-5 h-5" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-purple-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <FileText className="w-5 h-5 text-purple-400" />
                 Clinical Findings
               </CardTitle>
-              <CardDescription className="text-gray-600">Professional cognitive assessment results</CardDescription>
+              <CardDescription className="text-muted-foreground">Professional cognitive assessment results</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <div className="space-y-4">
                 {analysisResults.clinicalFindings.map((finding, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-5 bg-white">
+                  <div key={index} className="border border-white/10 rounded-lg p-5 bg-white/5">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
-                        <Badge className="bg-gray-100 text-gray-700 border-gray-300">{finding.category}</Badge>
+                        <Badge className="bg-white/10 text-muted-foreground border-white/10">{finding.category}</Badge>
                         <Badge className={
-                          finding.severity === 'Normal' ? 'bg-green-100 text-green-800' :
-                          finding.severity === 'Mild' ? 'bg-yellow-100 text-yellow-800' :
-                          finding.severity === 'Moderate' ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'
+                          finding.severity === 'Normal' ? 'bg-green-500/20 text-green-300' :
+                            finding.severity === 'Mild' ? 'bg-yellow-500/20 text-yellow-300' :
+                              finding.severity === 'Moderate' ? 'bg-orange-500/20 text-orange-300' : 'bg-red-500/20 text-red-300'
                         }>
                           {finding.severity === 'Normal' ? <CheckCircle className="w-3 h-3 mr-1" /> :
-                           finding.severity === 'Mild' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
-                           finding.severity === 'Moderate' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
-                           <XCircle className="w-3 h-3 mr-1" />}
+                            finding.severity === 'Mild' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
+                              finding.severity === 'Moderate' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
+                                <XCircle className="w-3 h-3 mr-1" />}
                           {finding.severity}
                         </Badge>
                       </div>
                     </div>
-                    <h4 className="font-semibold text-gray-900 mb-2 text-lg">{finding.finding}</h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">{finding.clinicalSignificance}</p>
+                    <h4 className="font-semibold text-foreground mb-2 text-lg">{finding.finding}</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{finding.clinicalSignificance}</p>
                   </div>
                 ))}
               </div>
@@ -1132,52 +1150,53 @@ export const EyeLab: React.FC = () => {
 
           {/* Disease Risk Assessment */}
           {analysisResults.diseaseRiskAssessment.length > 0 && (
-            <Card className="bg-white shadow-md border-l-4 border-red-600">
-              <CardHeader>
-                <CardTitle className="text-gray-900 flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5" />
+            <Card className="glass-panel border-0 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-red-500/50"></div>
+              <CardHeader className="bg-white/5 border-b border-white/5">
+                <CardTitle className="text-foreground flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-red-400" />
                   Disease Risk Assessment
                 </CardTitle>
-                <CardDescription className="text-gray-600">AI-powered analysis of neurological condition risks</CardDescription>
+                <CardDescription className="text-muted-foreground">AI-powered analysis of neurological condition risks</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <div className="space-y-5">
                   {analysisResults.diseaseRiskAssessment.map((assessment, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-5 bg-white">
+                    <div key={index} className="border border-white/10 rounded-lg p-5 bg-white/5">
                       <div className="flex items-start justify-between mb-4">
-                        <h4 className="font-semibold text-gray-900 text-lg">{assessment.condition}</h4>
+                        <h4 className="font-semibold text-foreground text-lg">{assessment.condition}</h4>
                         <div className="flex items-center gap-3">
                           <Badge className={
-                            assessment.riskLevel === 'Low' ? 'bg-green-100 text-green-800' :
-                            assessment.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'
+                            assessment.riskLevel === 'Low' ? 'bg-green-500/20 text-green-300' :
+                              assessment.riskLevel === 'Medium' ? 'bg-yellow-500/20 text-yellow-300' : 'bg-red-500/20 text-red-300'
                           }>
                             {assessment.riskLevel === 'Low' ? <CheckCircle className="w-3 h-3 mr-1" /> :
-                             assessment.riskLevel === 'Medium' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
-                             <XCircle className="w-3 h-3 mr-1" />}
+                              assessment.riskLevel === 'Medium' ? <AlertTriangle className="w-3 h-3 mr-1" /> :
+                                <XCircle className="w-3 h-3 mr-1" />}
                             {assessment.riskLevel} Risk
                           </Badge>
-                          <span className="text-xs font-medium text-gray-600">{assessment.confidence.toFixed(0)}% confidence</span>
+                          <span className="text-xs font-medium text-muted-foreground">{assessment.confidence.toFixed(0)}% confidence</span>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-                          <h5 className="text-sm font-semibold text-gray-900 mb-3">Risk Factors:</h5>
-                          <ul className="text-sm text-gray-700 space-y-2">
+                        <div className="bg-red-500/10 rounded-lg p-4 border border-red-500/20">
+                          <h5 className="text-sm font-semibold text-red-200 mb-3">Risk Factors:</h5>
+                          <ul className="text-sm text-red-100/80 space-y-2">
                             {assessment.riskFactors.map((factor, idx) => (
                               <li key={idx} className="flex items-start gap-2">
-                                <span className="text-red-600 font-bold mt-1">•</span>
+                                <span className="text-red-400 font-bold mt-1">•</span>
                                 <span>{factor}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                          <h5 className="text-sm font-semibold text-gray-900 mb-3">Clinical Markers:</h5>
-                          <ul className="text-sm text-gray-700 space-y-2">
+                        <div className="bg-blue-500/10 rounded-lg p-4 border border-blue-500/20">
+                          <h5 className="text-sm font-semibold text-blue-200 mb-3">Clinical Markers:</h5>
+                          <ul className="text-sm text-blue-100/80 space-y-2">
                             {assessment.clinicalMarkers.map((marker, idx) => (
                               <li key={idx} className="flex items-start gap-2">
-                                <span className="text-blue-600 font-bold mt-1">•</span>
+                                <span className="text-blue-400 font-bold mt-1">•</span>
                                 <span>{marker}</span>
                               </li>
                             ))}
@@ -1192,20 +1211,21 @@ export const EyeLab: React.FC = () => {
           )}
 
           {/* Clinical Recommendations */}
-          <Card className="bg-white shadow-md border-l-4 border-yellow-600">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <Zap className="w-5 h-5" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-yellow-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <Zap className="w-5 h-5 text-yellow-400" />
                 Clinical Recommendations
               </CardTitle>
-              <CardDescription className="text-gray-600">Personalized healthcare guidance based on assessment</CardDescription>
+              <CardDescription className="text-muted-foreground">Personalized healthcare guidance based on assessment</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <div className="space-y-4">
                 {analysisResults.recommendations.map((recommendation, index) => (
-                  <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-yellow-50 border border-yellow-200">
-                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 leading-relaxed">{recommendation}</span>
+                  <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                    <CheckCircle className="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-yellow-100/90 leading-relaxed">{recommendation}</span>
                   </div>
                 ))}
               </div>
@@ -1213,29 +1233,30 @@ export const EyeLab: React.FC = () => {
           </Card>
 
           {/* Report Generation */}
-          <Card className="bg-white shadow-md border-l-4 border-indigo-600">
-            <CardHeader>
-              <CardTitle className="text-gray-900 flex items-center gap-2">
-                <FileText className="w-5 h-5" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-foreground flex items-center gap-2">
+                <FileText className="w-5 h-5 text-indigo-400" />
                 Export Report
               </CardTitle>
-              <CardDescription className="text-gray-600">Download your comprehensive cognitive assessment</CardDescription>
+              <CardDescription className="text-muted-foreground">Download your comprehensive cognitive assessment</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-6">
               <div className="flex gap-4">
-                <Button 
+                <Button
                   onClick={() => generateReport(currentTest, trialResults)}
                   disabled={!currentTest}
-                  className="flex-1 bg-indigo-600 hover:bg-indigo-700"
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white border-0 shadow-lg shadow-indigo-900/20"
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Download Detailed Report
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => startTest(currentTest)}
                   disabled={!currentTest}
-                  className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50"
+                  className="flex-1 border-white/10 bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-foreground"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retake Test

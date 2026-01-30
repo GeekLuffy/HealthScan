@@ -209,7 +209,8 @@ Please provide helpful, accurate, and personalized analysis about the user's BP 
 
 Remember: ${languageInstruction}`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+      // Using gemini-flash-latest for better stability and quota management
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,8 +224,14 @@ Remember: ${languageInstruction}`;
         })
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Gemini API Error:', response.status, response.statusText, errorData);
+        throw new Error(`API Error: ${response.status} ${errorData.error?.message || response.statusText}`);
+      }
+
       const data = await response.json();
-      const botResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I apologize, but I encountered an error. Please try again.';
+      const botResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I apologize, but I encountered an error receiving a valid response. Please try again.';
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -309,8 +316,8 @@ Remember: ${languageInstruction}`;
 
                 <div
                   className={`max-w-[80%] p-3 rounded-2xl ${message.sender === 'user'
-                      ? 'bg-red-500/20 dark:bg-red-900/30 text-gray-900 dark:text-gray-100 ml-auto'
-                      : 'bg-gray-100 dark:bg-gray-700/80 text-gray-900 dark:text-gray-100'
+                    ? 'bg-red-500/20 dark:bg-red-900/30 text-gray-900 dark:text-gray-100 ml-auto'
+                    : 'bg-gray-100 dark:bg-gray-700/80 text-gray-900 dark:text-gray-100'
                     }`}
                 >
                   <div className={`text-sm leading-relaxed ${message.sender === 'bot' ? 'prose prose-sm' : ''}`}>

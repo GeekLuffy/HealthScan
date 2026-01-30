@@ -32,21 +32,22 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({
   onAnswerChange,
   currentQuestion
 }) => {
-  const progress = questions.length > 0 
+  const progress = questions.length > 0
     ? ((answers.filter(a => a !== undefined && a !== null).length / questions.length) * 100)
     : 0;
 
   return (
-    <Card className="bg-white shadow-md border-l-4 border-blue-600">
-      <CardHeader className="bg-gradient-to-r from-blue-50 to-white">
-        <CardTitle className="text-gray-900">{title}</CardTitle>
-        <CardDescription className="text-gray-600">{description}</CardDescription>
-        <Progress value={progress} className="mt-4" />
-        <p className="text-sm text-gray-600 mt-2">
+    <Card className="glass-panel border-0 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+      <CardHeader className="bg-white/5 border-b border-white/5">
+        <CardTitle className="text-foreground">{title}</CardTitle>
+        <CardDescription className="text-muted-foreground">{description}</CardDescription>
+        <Progress value={progress} className="mt-4 h-2 bg-white/10" indicatorClassName="bg-blue-500" />
+        <p className="text-sm text-muted-foreground mt-2">
           {answers.filter(a => a !== undefined && a !== null).length} of {questions.length} questions answered
         </p>
       </CardHeader>
-      <CardContent className="bg-white space-y-6">
+      <CardContent className="space-y-6 pt-6">
         {questions.map((question, index) => {
           const isCurrent = currentQuestion === undefined || currentQuestion === index;
           const isAnswered = answers[index] !== undefined && answers[index] !== null;
@@ -54,15 +55,14 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({
           return (
             <div
               key={question.id}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                isCurrent && !isAnswered
-                  ? 'border-blue-500 bg-blue-50'
+              className={`p-4 rounded-lg border transition-all ${isCurrent && !isAnswered
+                  ? 'border-blue-500/50 bg-blue-500/10'
                   : isAnswered
-                  ? 'border-green-300 bg-green-50'
-                  : 'border-gray-200 bg-gray-50'
-              }`}
+                    ? 'border-green-500/50 bg-green-500/10'
+                    : 'border-white/10 bg-white/5'
+                }`}
             >
-              <Label className="text-base font-semibold text-gray-900 mb-3 block">
+              <Label className="text-base font-semibold text-foreground mb-3 block">
                 {index + 1}. {question.text}
               </Label>
               <RadioGroup
@@ -73,10 +73,14 @@ export const Questionnaire: React.FC<QuestionnaireProps> = ({
                 <div className="space-y-2">
                   {question.options.map((option) => (
                     <div key={option.value} className="flex items-center space-x-2">
-                      <RadioGroupItem value={option.value.toString()} id={`${question.id}-${option.value}`} />
+                      <RadioGroupItem
+                        value={option.value.toString()}
+                        id={`${question.id}-${option.value}`}
+                        className="border-white/30 text-blue-500"
+                      />
                       <Label
                         htmlFor={`${question.id}-${option.value}`}
-                        className="text-gray-700 cursor-pointer flex-1"
+                        className="text-muted-foreground/90 cursor-pointer flex-1 user-select-none hover:text-foreground transition-colors"
                       >
                         {option.label}
                       </Label>
