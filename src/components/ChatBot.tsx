@@ -333,7 +333,7 @@ Please provide a helpful, accurate response about health screening, cardiovascul
                 <div
                   className={`max-w-[80%] p-3 rounded-2xl ${message.sender === 'user'
                     ? 'bg-purple-500/20 text-white ml-auto'
-                    : 'bg-gray-800/50 text-gray-100'
+                    : 'bg-white/5 text-foreground'
                     }`}
                 >
                   <div className="text-sm leading-relaxed prose prose-invert">
@@ -379,7 +379,7 @@ Please provide a helpful, accurate response about health screening, cardiovascul
                     ? "Ask me about this report, scores, or what the results mean..."
                     : "Ask me about neurological screening..."
               }
-              className="flex-1 bg-gray-800/50 border-gray-600 text-white placeholder-gray-400"
+              className="flex-1 bg-white/5 border-white/10 text-foreground placeholder:text-muted-foreground focus:border-purple-500"
               disabled={isLoading || !apiKey || apiKey.trim() === '' || !isValidApiKey(apiKey)}
             />
             <Button

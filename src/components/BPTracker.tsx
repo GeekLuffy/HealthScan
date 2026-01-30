@@ -10,12 +10,12 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Heart, 
-  Plus, 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
+import {
+  Heart,
+  Plus,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
   Activity,
   Calendar,
   BarChart3,
@@ -120,7 +120,7 @@ export const BPTracker: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const systolicNum = parseInt(systolic);
     const diastolicNum = parseInt(diastolic);
     const pulseNum = pulse ? parseInt(pulse) : undefined;
@@ -194,12 +194,12 @@ export const BPTracker: React.FC = () => {
         reading.notes || ''
       ];
     });
-    
+
     const csvContent = [
       headers.join(','),
       ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
     ].join('\n');
-    
+
     const dataBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
@@ -216,20 +216,20 @@ export const BPTracker: React.FC = () => {
     try {
       const { default: jsPDF } = await import('jspdf');
       const { default: autoTable } = await import('jspdf-autotable');
-      
+
       const doc = new jsPDF();
-      
+
       // Title
       doc.setFontSize(18);
       doc.text('Blood Pressure Report', 14, 20);
-      
+
       // Date range
       doc.setFontSize(12);
       const dateRange = readings.length > 0
         ? `${format(parseISO(readings[readings.length - 1].timestamp), 'MMM dd, yyyy')} - ${format(parseISO(readings[0].timestamp), 'MMM dd, yyyy')}`
         : 'No readings';
       doc.text(`Period: ${dateRange}`, 14, 30);
-      
+
       // Summary stats
       if (stats && stats.readingCount > 0) {
         doc.setFontSize(11);
@@ -237,7 +237,7 @@ export const BPTracker: React.FC = () => {
         doc.text(`Average BP: ${stats.averageSystolic}/${stats.averageDiastolic} mmHg`, 14, 46);
         doc.text(`Range: Systolic ${stats.minSystolic}-${stats.maxSystolic} | Diastolic ${stats.minDiastolic}-${stats.maxDiastolic}`, 14, 52);
       }
-      
+
       // Table data
       const tableData = readings.map(reading => {
         const date = parseISO(reading.timestamp);
@@ -252,7 +252,7 @@ export const BPTracker: React.FC = () => {
           reading.notes || ''
         ];
       });
-      
+
       autoTable(doc, {
         head: [['Date', 'Time', 'Systolic', 'Diastolic', 'Pulse', 'Category', 'Notes']],
         body: tableData,
@@ -261,7 +261,7 @@ export const BPTracker: React.FC = () => {
         headStyles: { fillColor: [239, 68, 68] },
         alternateRowStyles: { fillColor: [245, 245, 245] }
       });
-      
+
       doc.save(`bp-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
       setShowExportMenu(false);
     } catch (error) {
@@ -273,11 +273,11 @@ export const BPTracker: React.FC = () => {
   const printReport = () => {
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
-    
+
     const dateRange = readings.length > 0
       ? `${format(parseISO(readings[readings.length - 1].timestamp), 'MMM dd, yyyy')} - ${format(parseISO(readings[0].timestamp), 'MMM dd, yyyy')}`
       : 'No readings';
-    
+
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -317,9 +317,9 @@ export const BPTracker: React.FC = () => {
             </thead>
             <tbody>
               ${readings.map(reading => {
-                const date = parseISO(reading.timestamp);
-                const category = getBPCategory(reading.systolic, reading.diastolic);
-                return `
+      const date = parseISO(reading.timestamp);
+      const category = getBPCategory(reading.systolic, reading.diastolic);
+      return `
                   <tr>
                     <td>${format(date, 'MMM dd, yyyy')}</td>
                     <td>${format(date, 'HH:mm')}</td>
@@ -330,13 +330,13 @@ export const BPTracker: React.FC = () => {
                     <td>${reading.notes || ''}</td>
                   </tr>
                 `;
-              }).join('')}
+    }).join('')}
             </tbody>
           </table>
         </body>
       </html>
     `;
-    
+
     printWindow.document.write(htmlContent);
     printWindow.document.close();
     printWindow.print();
@@ -345,7 +345,7 @@ export const BPTracker: React.FC = () => {
 
   const prepareChartData = () => {
     const periodReadings = getBPReadingsForPeriod(selectedPeriod);
-    
+
     // For daily view, show individual readings by time
     if (selectedPeriod === 'daily') {
       return periodReadings
@@ -361,10 +361,10 @@ export const BPTracker: React.FC = () => {
         })
         .sort((a, b) => new Date(a.fullDate).getTime() - new Date(b.fullDate).getTime());
     }
-    
+
     // For weekly/monthly, group by date for aggregation
     const groupedByDate: Record<string, BPReading[]> = {};
-    
+
     periodReadings.forEach(reading => {
       const dateKey = reading.date;
       if (!groupedByDate[dateKey]) {
@@ -382,7 +382,7 @@ export const BPTracker: React.FC = () => {
         const avgDiastolic = Math.round(
           dayReadings.reduce((sum, r) => sum + r.diastolic, 0) / dayReadings.length
         );
-        
+
         return {
           date: format(parseISO(date), 'MMM dd'),
           fullDate: date,
@@ -400,7 +400,7 @@ export const BPTracker: React.FC = () => {
     }
 
     const periodReadings = getBPReadingsForPeriod(selectedPeriod);
-    const recentCategory = stats.lastReading 
+    const recentCategory = stats.lastReading
       ? getBPCategory(stats.lastReading.systolic, stats.lastReading.diastolic)
       : null;
 
@@ -464,12 +464,13 @@ export const BPTracker: React.FC = () => {
   const lastCategory = lastReading ? getBPCategory(lastReading.systolic, lastReading.diastolic) : null;
 
   return (
-    <Card className="bg-white dark:bg-gray-800 shadow-md border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-      <CardHeader className="bg-gradient-to-r from-red-50 to-white dark:from-red-900/20 dark:to-gray-800 pb-3">
+    <Card className="glass-panel border-0 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-1 h-full bg-red-500/50"></div>
+      <CardHeader className="bg-white/5 border-b border-white/5 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Heart className="w-5 h-5 text-red-600 dark:text-red-400" />
-            <CardTitle className="text-lg text-gray-900 dark:text-gray-100">
+            <Heart className="w-5 h-5 text-red-400" />
+            <CardTitle className="text-lg text-foreground">
               Smart BP Tracker
             </CardTitle>
           </div>
@@ -480,7 +481,7 @@ export const BPTracker: React.FC = () => {
                   onClick={() => setShowChat(true)}
                   size="sm"
                   variant="outline"
-                  className="border-purple-600 dark:border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30"
+                  className="border-purple-500/30 text-purple-400 hover:bg-purple-500/10 hover:text-purple-300"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Chat Analysis
@@ -490,38 +491,38 @@ export const BPTracker: React.FC = () => {
                     onClick={() => setShowExportMenu(!showExportMenu)}
                     size="sm"
                     variant="outline"
-                    className="border-red-600 dark:border-red-500 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                    className="border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Export
                   </Button>
                   {showExportMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                    <div className="absolute right-0 mt-2 w-48 bg-[#1e1e1e] rounded-lg shadow-lg border border-white/10 z-10 backdrop-blur-xl">
                       <div className="py-1">
                         <button
                           onClick={exportToPDF}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/5 flex items-center gap-2"
                         >
                           <FileDown className="w-4 h-4" />
                           Export as PDF
                         </button>
                         <button
                           onClick={exportToCSV}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/5 flex items-center gap-2"
                         >
                           <FileDown className="w-4 h-4" />
                           Export as CSV
                         </button>
                         <button
                           onClick={exportToJSON}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/5 flex items-center gap-2"
                         >
                           <FileDown className="w-4 h-4" />
                           Export as JSON
                         </button>
                         <button
                           onClick={printReport}
-                          className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                          className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-white/5 flex items-center gap-2"
                         >
                           <Printer className="w-4 h-4" />
                           Print Report
@@ -542,7 +543,7 @@ export const BPTracker: React.FC = () => {
             </Button>
           </div>
         </div>
-        <CardDescription className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+        <CardDescription className="text-sm text-muted-foreground mt-1">
           Track your blood pressure with visual trends and automatic alerts
         </CardDescription>
       </CardHeader>
@@ -570,15 +571,15 @@ export const BPTracker: React.FC = () => {
 
         {/* Entry Form */}
         {showForm && (
-          <Card className="bg-gray-50 dark:bg-gray-700 border-2 border-red-200 dark:border-red-800">
+          <Card className="bg-black/20 border border-red-500/20">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg text-gray-900 dark:text-gray-100">Add BP Reading</CardTitle>
+                <CardTitle className="text-lg text-foreground">Add BP Reading</CardTitle>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowForm(false)}
-                  className="text-gray-700 dark:text-gray-300"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -588,7 +589,7 @@ export const BPTracker: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                    <label className="text-sm font-medium text-foreground mb-1 block">
                       Systolic (mmHg) *
                     </label>
                     <Input
@@ -599,11 +600,11 @@ export const BPTracker: React.FC = () => {
                       min="50"
                       max="250"
                       required
-                      className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-red-500 focus:ring-red-500"
+                      className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-red-500 focus:ring-red-500"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                    <label className="text-sm font-medium text-foreground mb-1 block">
                       Diastolic (mmHg) *
                     </label>
                     <Input
@@ -614,12 +615,12 @@ export const BPTracker: React.FC = () => {
                       min="30"
                       max="150"
                       required
-                      className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-red-500 focus:ring-red-500"
+                      className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-red-500 focus:ring-red-500"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                  <label className="text-sm font-medium text-foreground mb-1 block">
                     Pulse (bpm) - Optional
                   </label>
                   <Input
@@ -629,11 +630,11 @@ export const BPTracker: React.FC = () => {
                     placeholder="72"
                     min="30"
                     max="200"
-                    className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+                    className="bg-black/20 text-foreground border-white/10"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                  <label className="text-sm font-medium text-foreground mb-1 block">
                     Notes (Optional)
                   </label>
                   <Input
@@ -641,7 +642,7 @@ export const BPTracker: React.FC = () => {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="e.g., Morning reading, after exercise"
-                    className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+                    className="bg-black/20 text-foreground border-white/10"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -652,6 +653,7 @@ export const BPTracker: React.FC = () => {
                     type="button"
                     variant="outline"
                     onClick={() => setShowForm(false)}
+                    className="border-white/10 hover:bg-white/5"
                   >
                     Cancel
                   </Button>
@@ -663,20 +665,20 @@ export const BPTracker: React.FC = () => {
 
         {/* Current Reading Display */}
         {lastReading && (
-          <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-lg p-4 border-2 border-red-200 dark:border-red-800">
+          <div className="bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-lg p-4 border border-red-500/20">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-700 dark:text-gray-300 mb-1 font-medium">Latest Reading</div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                <div className="text-sm text-muted-foreground mb-1 font-medium">Latest Reading</div>
+                <div className="text-3xl font-bold text-foreground">
                   {lastReading.systolic}/{lastReading.diastolic}
-                  <span className="text-lg text-gray-600 dark:text-gray-300 ml-2">mmHg</span>
+                  <span className="text-lg text-muted-foreground ml-2">mmHg</span>
                 </div>
                 {lastReading.pulse && (
-                  <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  <div className="text-sm text-muted-foreground mt-1">
                     Pulse: {lastReading.pulse} bpm
                   </div>
                 )}
-                <div className="text-xs text-gray-700 dark:text-gray-300 mt-2 font-medium">
+                <div className="text-xs text-muted-foreground mt-2 font-medium">
                   {format(parseISO(lastReading.timestamp), 'MMM dd, yyyy HH:mm')}
                 </div>
               </div>
@@ -686,10 +688,10 @@ export const BPTracker: React.FC = () => {
                     lastCategory?.severity === 'crisis' || lastCategory?.severity === 'high-stage2'
                       ? 'bg-red-600 text-white'
                       : lastCategory?.severity === 'high-stage1'
-                      ? 'bg-orange-500 text-white'
-                      : lastCategory?.severity === 'elevated'
-                      ? 'bg-yellow-500 text-white'
-                      : 'bg-green-600 text-white'
+                        ? 'bg-orange-500 text-white'
+                        : lastCategory?.severity === 'elevated'
+                          ? 'bg-yellow-500 text-white'
+                          : 'bg-green-600 text-white'
                   }
                 >
                   {lastCategory?.category || 'Unknown'}
@@ -702,44 +704,45 @@ export const BPTracker: React.FC = () => {
         {/* Stats Summary */}
         {stats && stats.readingCount > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-              <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Average BP</div>
-              <div className="text-lg font-bold text-blue-700 dark:text-blue-300">
+            <div className="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+              <div className="text-xs text-blue-200 mb-1 font-medium">Average BP</div>
+              <div className="text-lg font-bold text-blue-400">
                 {stats.averageSystolic}/{stats.averageDiastolic}
               </div>
-              <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 font-medium">mmHg</div>
+              <div className="text-xs text-blue-200/70 mt-1 font-medium">mmHg</div>
             </div>
-            <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 border border-green-200 dark:border-green-800">
-              <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Total Readings</div>
-              <div className="text-lg font-bold text-green-700 dark:text-green-300">
+            <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+              <div className="text-xs text-green-200 mb-1 font-medium">Total Readings</div>
+              <div className="text-lg font-bold text-green-400">
                 {stats.readingCount}
               </div>
-              <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 font-medium">records</div>
+              <div className="text-xs text-green-200/70 mt-1 font-medium">records</div>
             </div>
-            <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-3 border border-purple-200 dark:border-purple-800">
-              <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Systolic Range</div>
-              <div className="text-lg font-bold text-purple-700 dark:text-purple-300">
+            <div className="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+              <div className="text-xs text-purple-200 mb-1 font-medium">Systolic Range</div>
+              <div className="text-lg font-bold text-purple-400">
                 {stats.minSystolic}-{stats.maxSystolic}
               </div>
-              <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 font-medium">mmHg</div>
+              <div className="text-xs text-purple-200/70 mt-1 font-medium">mmHg</div>
             </div>
-            <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
-              <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Diastolic Range</div>
-              <div className="text-lg font-bold text-orange-700 dark:text-orange-300">
+            <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+              <div className="text-xs text-orange-200 mb-1 font-medium">Diastolic Range</div>
+              <div className="text-lg font-bold text-orange-400">
                 {stats.minDiastolic}-{stats.maxDiastolic}
               </div>
-              <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 font-medium">mmHg</div>
+              <div className="text-xs text-orange-200/70 mt-1 font-medium">mmHg</div>
             </div>
           </div>
         )}
 
         {/* BP Goals & Progress */}
         {readings.length > 0 && (
-          <Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-2 border-purple-200 dark:border-purple-800">
-            <CardHeader>
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-purple-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                  <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <CardTitle className="text-base flex items-center gap-2 text-foreground">
+                  <Target className="w-5 h-5 text-purple-400" />
                   BP Goals & Progress
                 </CardTitle>
                 {!bpGoal && (
@@ -767,10 +770,10 @@ export const BPTracker: React.FC = () => {
             <CardContent>
               {bpGoal ? (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-lg">
                     <div>
-                      <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">Target Goal</div>
-                      <div className="text-xl font-bold text-purple-700 dark:text-purple-300">
+                      <div className="text-sm text-muted-foreground font-medium">Target Goal</div>
+                      <div className="text-xl font-bold text-purple-400">
                         {bpGoal.systolic}/{bpGoal.diastolic} mmHg
                       </div>
                     </div>
@@ -787,18 +790,17 @@ export const BPTracker: React.FC = () => {
                   </div>
                   {stats && (
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="p-3 bg-white dark:bg-gray-800 rounded-lg">
-                        <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Systolic Progress</div>
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <div className="text-xs text-muted-foreground mb-1 font-medium">Systolic Progress</div>
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                             <div
-                              className={`h-full rounded-full ${
-                                stats.averageSystolic <= bpGoal.systolic
-                                  ? 'bg-green-500'
-                                  : stats.averageSystolic <= bpGoal.systolic + 10
+                              className={`h-full rounded-full ${stats.averageSystolic <= bpGoal.systolic
+                                ? 'bg-green-500'
+                                : stats.averageSystolic <= bpGoal.systolic + 10
                                   ? 'bg-yellow-500'
                                   : 'bg-red-500'
-                              }`}
+                                }`}
                               style={{
                                 width: `${Math.min(100, (bpGoal.systolic / stats.averageSystolic) * 100)}%`
                               }}
@@ -821,13 +823,12 @@ export const BPTracker: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                             <div
-                              className={`h-full rounded-full ${
-                                stats.averageDiastolic <= bpGoal.diastolic
-                                  ? 'bg-green-500'
-                                  : stats.averageDiastolic <= bpGoal.diastolic + 5
+                              className={`h-full rounded-full ${stats.averageDiastolic <= bpGoal.diastolic
+                                ? 'bg-green-500'
+                                : stats.averageDiastolic <= bpGoal.diastolic + 5
                                   ? 'bg-yellow-500'
                                   : 'bg-red-500'
-                              }`}
+                                }`}
                               style={{
                                 width: `${Math.min(100, (bpGoal.diastolic / stats.averageDiastolic) * 100)}%`
                               }}
@@ -850,7 +851,7 @@ export const BPTracker: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-2 font-medium">
+                  <p className="text-sm text-muted-foreground mb-2 font-medium">
                     Set a BP goal to track your progress
                   </p>
                   <Button
@@ -879,10 +880,11 @@ export const BPTracker: React.FC = () => {
 
         {/* Period Comparison */}
         {readings.length >= 6 && (
-          <Card className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800">
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <BarChart3 className="w-5 h-5 text-green-600 dark:text-green-400" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-green-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-base flex items-center gap-2 text-foreground">
+                <BarChart3 className="w-5 h-5 text-green-400" />
                 Period Comparison
               </CardTitle>
             </CardHeader>
@@ -892,57 +894,55 @@ export const BPTracker: React.FC = () => {
                 const lastMonth = getBPReadingsForPeriod('monthly');
                 const weekStats = calculateBPStats(lastWeek);
                 const monthStats = calculateBPStats(lastMonth);
-                
+
                 const weekComparison = stats && weekStats.readingCount > 0
                   ? {
-                      systolic: stats.averageSystolic - weekStats.averageSystolic,
-                      diastolic: stats.averageDiastolic - weekStats.averageDiastolic,
-                    }
+                    systolic: stats.averageSystolic - weekStats.averageSystolic,
+                    diastolic: stats.averageDiastolic - weekStats.averageDiastolic,
+                  }
                   : null;
-                
+
                 const monthComparison = stats && monthStats.readingCount > 0
                   ? {
-                      systolic: stats.averageSystolic - monthStats.averageSystolic,
-                      diastolic: stats.averageDiastolic - monthStats.averageDiastolic,
-                    }
+                    systolic: stats.averageSystolic - monthStats.averageSystolic,
+                    diastolic: stats.averageDiastolic - monthStats.averageDiastolic,
+                  }
                   : null;
 
                 return (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {weekComparison && (
-                      <div className="p-3 bg-white dark:bg-gray-800 rounded-lg">
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <div className="text-sm font-semibold text-foreground mb-2">
                           vs Last Week
                         </div>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600 dark:text-gray-300">Systolic:</span>
+                            <span className="text-xs text-muted-foreground">Systolic:</span>
                             <div className="flex items-center gap-1">
                               {weekComparison.systolic < 0 ? (
                                 <TrendingDown className="w-4 h-4 text-green-500" />
                               ) : weekComparison.systolic > 0 ? (
                                 <TrendingUp className="w-4 h-4 text-red-500" />
                               ) : null}
-                              <span className={`text-sm font-semibold ${
-                                weekComparison.systolic < 0 ? 'text-green-600 dark:text-green-400' : 
-                                weekComparison.systolic > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'
-                              }`}>
+                              <span className={`text-sm font-semibold ${weekComparison.systolic < 0 ? 'text-green-400' :
+                                weekComparison.systolic > 0 ? 'text-red-400' : 'text-muted-foreground'
+                                }`}>
                                 {weekComparison.systolic > 0 ? '+' : ''}{weekComparison.systolic.toFixed(1)} mmHg
                               </span>
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600 dark:text-gray-300">Diastolic:</span>
+                            <span className="text-xs text-muted-foreground">Diastolic:</span>
                             <div className="flex items-center gap-1">
                               {weekComparison.diastolic < 0 ? (
                                 <TrendingDown className="w-4 h-4 text-green-500" />
                               ) : weekComparison.diastolic > 0 ? (
                                 <TrendingUp className="w-4 h-4 text-red-500" />
                               ) : null}
-                              <span className={`text-sm font-semibold ${
-                                weekComparison.diastolic < 0 ? 'text-green-600 dark:text-green-400' : 
-                                weekComparison.diastolic > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'
-                              }`}>
+                              <span className={`text-sm font-semibold ${weekComparison.diastolic < 0 ? 'text-green-400' :
+                                weekComparison.diastolic > 0 ? 'text-red-400' : 'text-muted-foreground'
+                                }`}>
                                 {weekComparison.diastolic > 0 ? '+' : ''}{weekComparison.diastolic.toFixed(1)} mmHg
                               </span>
                             </div>
@@ -951,39 +951,37 @@ export const BPTracker: React.FC = () => {
                       </div>
                     )}
                     {monthComparison && (
-                      <div className="p-3 bg-white dark:bg-gray-800 rounded-lg">
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      <div className="p-3 bg-white/5 border border-white/10 rounded-lg">
+                        <div className="text-sm font-semibold text-foreground mb-2">
                           vs Last Month
                         </div>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600 dark:text-gray-300">Systolic:</span>
+                            <span className="text-xs text-muted-foreground">Systolic:</span>
                             <div className="flex items-center gap-1">
                               {monthComparison.systolic < 0 ? (
                                 <TrendingDown className="w-4 h-4 text-green-500" />
                               ) : monthComparison.systolic > 0 ? (
                                 <TrendingUp className="w-4 h-4 text-red-500" />
                               ) : null}
-                              <span className={`text-sm font-semibold ${
-                                monthComparison.systolic < 0 ? 'text-green-600 dark:text-green-400' : 
-                                monthComparison.systolic > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'
-                              }`}>
+                              <span className={`text-sm font-semibold ${monthComparison.systolic < 0 ? 'text-green-400' :
+                                monthComparison.systolic > 0 ? 'text-red-400' : 'text-muted-foreground'
+                                }`}>
                                 {monthComparison.systolic > 0 ? '+' : ''}{monthComparison.systolic.toFixed(1)} mmHg
                               </span>
                             </div>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-600 dark:text-gray-300">Diastolic:</span>
+                            <span className="text-xs text-muted-foreground">Diastolic:</span>
                             <div className="flex items-center gap-1">
                               {monthComparison.diastolic < 0 ? (
                                 <TrendingDown className="w-4 h-4 text-green-500" />
                               ) : monthComparison.diastolic > 0 ? (
                                 <TrendingUp className="w-4 h-4 text-red-500" />
                               ) : null}
-                              <span className={`text-sm font-semibold ${
-                                monthComparison.diastolic < 0 ? 'text-green-600 dark:text-green-400' : 
-                                monthComparison.diastolic > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-600 dark:text-gray-400'
-                              }`}>
+                              <span className={`text-sm font-semibold ${monthComparison.diastolic < 0 ? 'text-green-400' :
+                                monthComparison.diastolic > 0 ? 'text-red-400' : 'text-muted-foreground'
+                                }`}>
                                 {monthComparison.diastolic > 0 ? '+' : ''}{monthComparison.diastolic.toFixed(1)} mmHg
                               </span>
                             </div>
@@ -1000,19 +998,20 @@ export const BPTracker: React.FC = () => {
 
         {/* Health Tips */}
         {readings.length > 0 && stats && (
-          <Card className="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-2 border-yellow-200 dark:border-yellow-800">
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <Lightbulb className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-yellow-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-base flex items-center gap-2 text-foreground">
+                <Lightbulb className="w-5 h-5 text-yellow-400" />
                 Personalized Health Tips
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              <div className="space-y-3 pt-3">
                 {(() => {
                   const tips: string[] = [];
                   const avgCategory = getBPCategory(stats.averageSystolic, stats.averageDiastolic);
-                  
+
                   if (avgCategory.severity === 'high-stage1' || avgCategory.severity === 'high-stage2') {
                     tips.push('💊 Consider consulting with your healthcare provider about BP management');
                     tips.push('🧂 Reduce sodium intake - aim for less than 2,300mg per day');
@@ -1028,17 +1027,17 @@ export const BPTracker: React.FC = () => {
                     tips.push('📋 Continue regular monitoring to maintain this level');
                     tips.push('🏋️ Keep up with regular exercise and healthy eating');
                   }
-                  
+
                   if (stats.averageSystolic >= 120 || stats.averageDiastolic >= 80) {
                     tips.push('⏰ Take readings at consistent times (morning/evening) for better tracking');
                   }
-                  
+
                   if (readings.length < 7) {
                     tips.push('📈 Track more readings to get better insights into your BP patterns');
                   }
-                  
+
                   return tips.map((tip, idx) => (
-                    <div key={idx} className="flex items-start gap-2 p-2 bg-white dark:bg-gray-800 rounded text-sm text-gray-700 dark:text-gray-300">
+                    <div key={idx} className="flex items-start gap-2 p-2 bg-white/5 border border-white/10 rounded text-sm text-foreground">
                       <span>{tip}</span>
                     </div>
                   ));
@@ -1050,39 +1049,40 @@ export const BPTracker: React.FC = () => {
 
         {/* BP Guidelines Info */}
         {readings.length > 0 && (
-          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800">
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-base flex items-center gap-2 text-foreground">
+                <Info className="w-5 h-5 text-blue-400" />
                 BP Guidelines Reference
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mt-4">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded">
-                    <span className="text-gray-700 dark:text-gray-300">Normal:</span>
+                  <div className="flex items-center justify-between p-2 bg-white/5 border border-white/10 rounded">
+                    <span className="text-muted-foreground">Normal:</span>
                     <Badge className="bg-green-600 text-white">Below 120/80</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded">
-                    <span className="text-gray-700 dark:text-gray-300">Elevated:</span>
+                  <div className="flex items-center justify-between p-2 bg-white/5 border border-white/10 rounded">
+                    <span className="text-muted-foreground">Elevated:</span>
                     <Badge className="bg-yellow-500 text-white">120-129/&lt;80</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded">
-                    <span className="text-gray-700 dark:text-gray-300">High Stage 1:</span>
+                  <div className="flex items-center justify-between p-2 bg-white/5 border border-white/10 rounded">
+                    <span className="text-muted-foreground">High Stage 1:</span>
                     <Badge className="bg-orange-500 text-white">130-139/80-89</Badge>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded">
-                    <span className="text-gray-700 dark:text-gray-300">High Stage 2:</span>
+                  <div className="flex items-center justify-between p-2 bg-white/5 border border-white/10 rounded">
+                    <span className="text-muted-foreground">High Stage 2:</span>
                     <Badge className="bg-red-600 text-white">140+/90+</Badge>
                   </div>
-                  <div className="flex items-center justify-between p-2 bg-white dark:bg-gray-800 rounded">
-                    <span className="text-gray-700 dark:text-gray-300">Crisis:</span>
+                  <div className="flex items-center justify-between p-2 bg-white/5 border border-white/10 rounded">
+                    <span className="text-muted-foreground">Crisis:</span>
                     <Badge className="bg-red-700 text-white">180+/120+</Badge>
                   </div>
-                  <div className="text-xs text-gray-700 dark:text-gray-300 mt-2 italic font-medium">
+                  <div className="text-xs text-muted-foreground mt-2 italic font-medium">
                     * Consult healthcare provider for personalized targets
                   </div>
                 </div>
@@ -1094,31 +1094,31 @@ export const BPTracker: React.FC = () => {
         {/* Charts */}
         {readings.length > 0 && (
           <Tabs value={selectedPeriod} onValueChange={(v) => setSelectedPeriod(v as typeof selectedPeriod)}>
-            <TabsList className="grid w-full grid-cols-3 gap-1 bg-gray-100 p-1 rounded-lg">
-              <TabsTrigger 
-                value="daily" 
-                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-red-700 data-[state=active]:font-semibold rounded-md py-2.5 text-sm font-medium transition-all text-gray-800 hover:text-gray-900"
+            <TabsList className="grid w-full grid-cols-3 gap-1 bg-black/20 p-1 rounded-lg">
+              <TabsTrigger
+                value="daily"
+                className="data-[state=active]:bg-white/10 data-[state=active]:text-white rounded-md py-2 text-sm font-medium transition-all text-muted-foreground hover:text-white"
               >
                 Daily
               </TabsTrigger>
-              <TabsTrigger 
-                value="weekly" 
-                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-red-700 data-[state=active]:font-semibold rounded-md py-2.5 text-sm font-medium transition-all text-gray-800 hover:text-gray-900"
+              <TabsTrigger
+                value="weekly"
+                className="data-[state=active]:bg-white/10 data-[state=active]:text-white rounded-md py-2 text-sm font-medium transition-all text-muted-foreground hover:text-white"
               >
                 Weekly
               </TabsTrigger>
-              <TabsTrigger 
-                value="monthly" 
-                className="data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-red-700 data-[state=active]:font-semibold rounded-md py-2.5 text-sm font-medium transition-all text-gray-800 hover:text-gray-900"
+              <TabsTrigger
+                value="monthly"
+                className="data-[state=active]:bg-white/10 data-[state=active]:text-white rounded-md py-2 text-sm font-medium transition-all text-muted-foreground hover:text-white"
               >
                 Monthly
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value={selectedPeriod} className="mt-4">
-              <Card className="bg-white dark:bg-gray-800">
+              <Card className="glass-panel border-0">
                 <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                  <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                     <BarChart3 className="w-5 h-5" />
                     BP Trends - {selectedPeriod.charAt(0).toUpperCase() + selectedPeriod.slice(1)}
                   </CardTitle>
@@ -1128,25 +1128,25 @@ export const BPTracker: React.FC = () => {
                     <ResponsiveContainer width="100%" height={300}>
                       <LineChart data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                        <XAxis 
-                          dataKey="date" 
+                        <XAxis
+                          dataKey="date"
                           stroke="#6b7280"
                           tick={{ fill: '#6b7280', fontSize: 12 }}
                         />
-                        <YAxis 
-                          domain={[0, 200]} 
+                        <YAxis
+                          domain={[0, 200]}
                           stroke="#6b7280"
                           tick={{ fill: '#6b7280', fontSize: 12 }}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
+                        <Tooltip
+                          contentStyle={{
                             backgroundColor: 'rgba(255, 255, 255, 0.95)',
                             border: '1px solid #e5e7eb',
                             borderRadius: '0.5rem',
                             color: '#111827'
                           }}
                         />
-                        <Legend 
+                        <Legend
                           wrapperStyle={{ color: '#374151', fontSize: '14px' }}
                         />
                         <Line
@@ -1169,11 +1169,11 @@ export const BPTracker: React.FC = () => {
                     </ResponsiveContainer>
                   ) : (
                     <div className="text-center py-8">
-                      <BarChart3 className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-2" />
-                      <p className="text-gray-600 dark:text-gray-400 font-medium">
+                      <BarChart3 className="w-12 h-12 mx-auto text-muted-foreground mb-2" />
+                      <p className="text-foreground font-medium">
                         No readings available for {selectedPeriod} period
                       </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         Add readings to see trends
                       </p>
                     </div>
@@ -1186,44 +1186,45 @@ export const BPTracker: React.FC = () => {
 
         {/* Analysis Report */}
         {analysisReport && (
-          <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-2 border-blue-200 dark:border-blue-800">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2 text-gray-900 dark:text-gray-100">
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-lg flex items-center gap-2 text-foreground">
                 <FileText className="w-5 h-5" />
                 Analysis Report
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-2 gap-4 text-sm pt-4">
                 <div>
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">Period:</span>
-                  <span className="font-semibold ml-2 capitalize text-gray-900 dark:text-gray-100">{analysisReport.period}</span>
+                  <span className="text-muted-foreground font-medium">Period:</span>
+                  <span className="font-semibold ml-2 capitalize text-foreground">{analysisReport.period}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600 dark:text-gray-300">Readings:</span>
-                  <span className="font-semibold ml-2 text-gray-900 dark:text-gray-100">{analysisReport.totalReadings}</span>
+                  <span className="text-muted-foreground">Readings:</span>
+                  <span className="font-semibold ml-2 text-foreground">{analysisReport.totalReadings}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600 dark:text-gray-300">Average BP:</span>
-                  <span className="font-semibold ml-2 text-gray-900 dark:text-gray-100">{analysisReport.averageBP}</span>
+                  <span className="text-muted-foreground">Average BP:</span>
+                  <span className="font-semibold ml-2 text-foreground">{analysisReport.averageBP}</span>
                 </div>
                 <div>
-                  <span className="text-gray-600 dark:text-gray-300">Current Status:</span>
-                  <span className="font-semibold ml-2 text-gray-900 dark:text-gray-100">{analysisReport.currentCategory}</span>
+                  <span className="text-muted-foreground">Current Status:</span>
+                  <span className="font-semibold ml-2 text-foreground">{analysisReport.currentCategory}</span>
                 </div>
               </div>
-              
-              <div className="border-t border-gray-300 dark:border-gray-600 pt-4">
-                <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">BP Range:</div>
-                <div className="text-sm text-gray-700 dark:text-gray-300 font-medium">{analysisReport.range}</div>
+
+              <div className="border-t border-white/10 pt-4">
+                <div className="text-sm font-semibold text-foreground mb-2">BP Range:</div>
+                <div className="text-sm text-foreground font-medium">{analysisReport.range}</div>
               </div>
 
               {analysisReport.recommendations.length > 0 && (
-                <div className="border-t border-gray-300 dark:border-gray-600 pt-4">
-                  <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Recommendations:</div>
+                <div className="border-t border-white/10 pt-4">
+                  <div className="text-sm font-semibold text-foreground mb-2">Recommendations:</div>
                   <ul className="space-y-1">
                     {analysisReport.recommendations.map((rec, idx) => (
-                      <li key={idx} className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2 font-medium">
+                      <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2 font-medium">
                         <span>{rec}</span>
                       </li>
                     ))}
@@ -1236,45 +1237,45 @@ export const BPTracker: React.FC = () => {
 
         {/* Recent Readings List */}
         {readings.length > 0 && (
-          <Card className="bg-white dark:bg-gray-800">
+          <Card className="glass-panel border-0">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg text-gray-900 dark:text-gray-100">Recent Readings</CardTitle>
-                <Badge variant="outline" className="text-xs">
+                <CardTitle className="text-lg text-foreground">Recent Readings</CardTitle>
+                <Badge variant="outline" className="text-xs border-white/10 text-muted-foreground">
                   {readings.length} total
                 </Badge>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+              <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
                 {readings.slice(0, 10).map((reading) => {
                   const category = getBPCategory(reading.systolic, reading.diastolic);
                   return (
                     <div
                       key={reading.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
+                      className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10"
                     >
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
-                          <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                          <div className="text-lg font-bold text-foreground">
                             {reading.systolic}/{reading.diastolic}
-                            <span className="text-sm text-gray-600 dark:text-gray-300 ml-1">mmHg</span>
+                            <span className="text-sm text-muted-foreground ml-1">mmHg</span>
                           </div>
                           <Badge
                             className={
                               category.severity === 'crisis' || category.severity === 'high-stage2'
                                 ? 'bg-red-600 text-white'
                                 : category.severity === 'high-stage1'
-                                ? 'bg-orange-500 text-white'
-                                : category.severity === 'elevated'
-                                ? 'bg-yellow-500 text-white'
-                                : 'bg-green-600 text-white'
+                                  ? 'bg-orange-500 text-white'
+                                  : category.severity === 'elevated'
+                                    ? 'bg-yellow-500 text-white'
+                                    : 'bg-green-600 text-white'
                             }
                           >
                             {category.category}
                           </Badge>
                         </div>
-                        <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                        <div className="text-xs text-muted-foreground mt-1">
                           {format(parseISO(reading.timestamp), 'MMM dd, yyyy HH:mm')}
                           {reading.notes && ` • ${reading.notes}`}
                         </div>
@@ -1283,7 +1284,7 @@ export const BPTracker: React.FC = () => {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(reading.id)}
-                        className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/30"
+                        className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -1298,10 +1299,10 @@ export const BPTracker: React.FC = () => {
         {/* Empty State */}
         {readings.length === 0 && (
           <div className="text-center py-8 space-y-4">
-            <Heart className="w-16 h-16 mx-auto text-gray-600 dark:text-gray-400" />
+            <Heart className="w-16 h-16 mx-auto text-muted-foreground" />
             <div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">No BP readings yet</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-4 font-medium">
+              <h3 className="text-lg font-semibold mb-2 text-foreground">No BP readings yet</h3>
+              <p className="text-muted-foreground mb-4 font-medium">
                 Start tracking your blood pressure by adding your first reading
               </p>
               <Button
@@ -1315,7 +1316,7 @@ export const BPTracker: React.FC = () => {
           </div>
         )}
       </CardContent>
-      
+
       {/* BP Analysis Chat */}
       <BPChatBot
         isOpen={showChat}

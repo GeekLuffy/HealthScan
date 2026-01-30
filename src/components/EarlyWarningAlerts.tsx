@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
-import { 
-  AlertTriangle, 
+import {
+  AlertTriangle,
   Heart,
   Thermometer,
   Droplet,
@@ -44,13 +44,13 @@ export const EarlyWarningAlerts: React.FC = () => {
   useEffect(() => {
     loadRecentAlerts();
     loadCriticalCount();
-    
+
     // Auto-check every 5 minutes if enabled
     if (autoCheck) {
       const interval = setInterval(() => {
         checkSensorData();
       }, 5 * 60 * 1000);
-      
+
       return () => clearInterval(interval);
     }
   }, [autoCheck]);
@@ -58,12 +58,12 @@ export const EarlyWarningAlerts: React.FC = () => {
   useEffect(() => {
     // Load heart rate and temperature from Google Fit if available
     loadSensorData();
-    
+
     // Refresh sensor data every 30 seconds
     const interval = setInterval(() => {
       loadSensorData();
     }, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -84,7 +84,7 @@ export const EarlyWarningAlerts: React.FC = () => {
       if (!token) {
         return;
       }
-      
+
       const hrResponse = await fetch('/api/google-fit/data/heart-rate', {
         method: 'GET',
         headers: {
@@ -96,7 +96,7 @@ export const EarlyWarningAlerts: React.FC = () => {
         // API returns array of { timestamp, bpm, source }
         if (Array.isArray(hrData) && hrData.length > 0) {
           // Get the most recent heart rate reading
-          const latestHR = hrData.sort((a, b) => 
+          const latestHR = hrData.sort((a, b) =>
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           )[0];
           setHeartRate(Math.round(latestHR.bpm));
@@ -140,17 +140,17 @@ export const EarlyWarningAlerts: React.FC = () => {
     };
 
     const detectedAlerts = analyzeSensorData(sensorData);
-    
+
     if (detectedAlerts.length > 0) {
       detectedAlerts.forEach(alert => {
         saveAlert(alert);
-        
+
         // Send SMS if phone number is set and alert is critical
         if (phoneNumber && alert.requiresImmediateAction) {
           sendSMSAlert(alert, phoneNumber);
         }
       });
-      
+
       loadRecentAlerts();
       loadCriticalCount();
     }
@@ -184,12 +184,13 @@ export const EarlyWarningAlerts: React.FC = () => {
   };
 
   return (
-    <Card className="bg-white dark:bg-gray-800 shadow-md border-l-4 border-red-500 hover:shadow-lg transition-shadow">
-      <CardHeader className="bg-gradient-to-r from-red-50 to-white dark:from-red-900/20 dark:to-gray-800 pb-3">
+    <Card className="glass-panel border-0 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-1 h-full bg-red-500/50"></div>
+      <CardHeader className="bg-white/5 border-b border-white/5 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-            <CardTitle className="text-lg text-gray-900 dark:text-gray-100">
+            <AlertTriangle className="w-5 h-5 text-red-500" />
+            <CardTitle className="text-lg text-foreground">
               Early Warning Alerts System
             </CardTitle>
           </div>
@@ -199,47 +200,48 @@ export const EarlyWarningAlerts: React.FC = () => {
             </Badge>
           )}
         </div>
-        <CardDescription className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+        <CardDescription className="text-sm text-muted-foreground mt-1">
           Hypoglycemia/Hyperglycemia detection using heart rate, temperature, and glucose sensors
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-4 space-y-4">
         {/* Current Sensor Data */}
+        {/* Current Sensor Data */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 border border-blue-200 dark:border-blue-800 text-center">
-            <Heart className="w-6 h-6 text-blue-600 dark:text-blue-400 mx-auto mb-1" />
-            <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Heart Rate</div>
-            <div className="text-xl font-bold text-blue-700 dark:text-blue-300">
+          <div className="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20 text-center">
+            <Heart className="w-6 h-6 text-blue-400 mx-auto mb-1" />
+            <div className="text-xs text-blue-200 mb-1 font-medium">Heart Rate</div>
+            <div className="text-xl font-bold text-blue-300">
               {heartRate ? `${heartRate} bpm` : 'N/A'}
             </div>
           </div>
-          <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-3 border border-orange-200 dark:border-orange-800 text-center">
-            <Thermometer className="w-6 h-6 text-orange-600 dark:text-orange-400 mx-auto mb-1" />
-            <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Temperature</div>
-            <div className="text-xl font-bold text-orange-700 dark:text-orange-300">
+          <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20 text-center">
+            <Thermometer className="w-6 h-6 text-orange-400 mx-auto mb-1" />
+            <div className="text-xs text-orange-200 mb-1 font-medium">Temperature</div>
+            <div className="text-xl font-bold text-orange-300">
               {temperature ? `${temperature.toFixed(1)}°C` : 'N/A'}
             </div>
           </div>
-          <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 border border-green-200 dark:border-green-800 text-center">
-            <Droplet className="w-6 h-6 text-green-600 dark:text-green-400 mx-auto mb-1" />
-            <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Glucose</div>
-            <div className="text-xl font-bold text-green-700 dark:text-green-300">
+          <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20 text-center">
+            <Droplet className="w-6 h-6 text-green-400 mx-auto mb-1" />
+            <div className="text-xs text-green-200 mb-1 font-medium">Glucose</div>
+            <div className="text-xl font-bold text-green-300">
               {glucose ? `${glucose} mg/dL` : 'N/A'}
             </div>
           </div>
         </div>
 
         {/* Manual Input */}
-        <Card className="bg-gray-50 dark:bg-gray-700">
+        <Card className="glass-panel bg-white/5 border border-white/10">
           <CardHeader>
-            <CardTitle className="text-base text-gray-900 dark:text-gray-100">
+            <CardTitle className="text-base text-foreground">
               Manual Sensor Input (Optional)
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                <label className="text-sm font-medium text-foreground mb-1 block">
                   Heart Rate (bpm)
                 </label>
                 <Input
@@ -247,11 +249,11 @@ export const EarlyWarningAlerts: React.FC = () => {
                   value={heartRate || ''}
                   onChange={(e) => setHeartRate(e.target.value ? parseFloat(e.target.value) : null)}
                   placeholder="72"
-                  className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-red-500 focus:ring-red-500"
+                  className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-red-500"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                <label className="text-sm font-medium text-foreground mb-1 block">
                   Temperature (°C)
                 </label>
                 <Input
@@ -260,11 +262,11 @@ export const EarlyWarningAlerts: React.FC = () => {
                   onChange={(e) => setTemperature(e.target.value ? parseFloat(e.target.value) : null)}
                   placeholder="36.5"
                   step="0.1"
-                  className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-red-500 focus:ring-red-500"
+                  className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-red-500"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                <label className="text-sm font-medium text-foreground mb-1 block">
                   Glucose (mg/dL)
                 </label>
                 <Input
@@ -272,7 +274,7 @@ export const EarlyWarningAlerts: React.FC = () => {
                   value={glucose || ''}
                   onChange={(e) => setGlucose(e.target.value ? parseFloat(e.target.value) : null)}
                   placeholder="100"
-                  className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-red-500 focus:ring-red-500"
+                  className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-red-500"
                 />
               </div>
             </div>
@@ -287,10 +289,10 @@ export const EarlyWarningAlerts: React.FC = () => {
         </Card>
 
         {/* SMS Alert Setup */}
-        <Card className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+        <Card className="glass-panel bg-blue-500/10 border border-blue-500/30">
           <CardHeader>
-            <CardTitle className="text-base text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <CardTitle className="text-base text-foreground flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-blue-400" />
               SMS Alert Setup (GSM Module)
             </CardTitle>
           </CardHeader>
@@ -300,7 +302,7 @@ export const EarlyWarningAlerts: React.FC = () => {
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter phone number for emergency alerts"
-                className="bg-white dark:bg-gray-800 flex-1"
+                className="bg-black/20 text-foreground border-white/10 flex-1"
               />
               <Button
                 onClick={() => {
@@ -321,8 +323,8 @@ export const EarlyWarningAlerts: React.FC = () => {
         {/* Recent Alerts */}
         {alerts.length > 0 && (
           <div className="space-y-3">
-            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <Bell className="w-5 h-5 text-red-600 dark:text-red-400" />
+            <div className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <Bell className="w-5 h-5 text-red-400" />
               Recent Alerts (Last 7 Days)
             </div>
             {alerts.map((alert) => (
@@ -330,33 +332,33 @@ export const EarlyWarningAlerts: React.FC = () => {
                 key={alert.id}
                 className={
                   alert.severity === 'critical'
-                    ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                    ? 'border-red-500/50 bg-red-500/10'
                     : alert.severity === 'high'
-                    ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                    : 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20'
+                      ? 'border-orange-500/50 bg-orange-500/10'
+                      : 'border-yellow-500/50 bg-yellow-500/10'
                 }
               >
                 <div className="flex items-start gap-2">
                   {getAlertTypeIcon(alert.type)}
                   <div className="flex-1">
-                    <AlertTitle className="font-semibold text-gray-900 dark:text-gray-100">
+                    <AlertTitle className="font-semibold text-foreground">
                       {alert.message}
                     </AlertTitle>
                     <AlertDescription className="mt-2 space-y-2">
-                      <div className="text-xs text-gray-600 dark:text-gray-300">
+                      <div className="text-xs text-muted-foreground">
                         {format(parseISO(alert.timestamp), 'MMM dd, yyyy HH:mm')}
                       </div>
-                      <div className="text-sm text-gray-700 dark:text-gray-300">
-                        <strong>Sensor Data:</strong> HR: {alert.sensorData.heartRate || 'N/A'} bpm, 
-                        Temp: {alert.sensorData.temperature ? `${alert.sensorData.temperature.toFixed(1)}°C` : 'N/A'}, 
+                      <div className="text-sm text-foreground">
+                        <strong>Sensor Data:</strong> HR: {alert.sensorData.heartRate || 'N/A'} bpm,
+                        Temp: {alert.sensorData.temperature ? `${alert.sensorData.temperature.toFixed(1)}°C` : 'N/A'},
                         Glucose: {alert.sensorData.glucose || 'N/A'} mg/dL
                       </div>
                       {alert.recommendations.length > 0 && (
                         <div className="mt-2">
-                          <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                          <div className="text-sm font-semibold text-foreground mb-1">
                             Recommendations:
                           </div>
-                          <ul className="list-disc list-inside space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                          <ul className="list-disc list-inside space-y-1 text-sm text-foreground/80">
                             {alert.recommendations.map((rec, idx) => (
                               <li key={idx}>{rec}</li>
                             ))}
@@ -382,12 +384,12 @@ export const EarlyWarningAlerts: React.FC = () => {
         {/* Empty State */}
         {alerts.length === 0 && (
           <div className="text-center py-8 space-y-4">
-            <AlertTriangle className="w-16 h-16 mx-auto text-gray-600 dark:text-gray-400" />
+            <AlertTriangle className="w-16 h-16 mx-auto text-muted-foreground opacity-50" />
             <div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
                 No alerts detected
               </h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-4 font-medium">
+              <p className="text-muted-foreground mb-4 font-medium">
                 System will automatically check sensor data and alert you of any risks
               </p>
               <Button

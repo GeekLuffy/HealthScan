@@ -11,12 +11,12 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Droplet, 
-  Plus, 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
+import {
+  Droplet,
+  Plus,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
   Brain,
   BarChart3,
   X,
@@ -73,11 +73,11 @@ export const GlucoseTracker: React.FC = () => {
       const periodReadings = getGlucoseReadingsForPeriod(selectedPeriod);
       const periodStats = calculateGlucoseStats(periodReadings);
       setStats(periodStats);
-      
+
       // Generate predictions
       const preds = predictGlucoseTrend(readings);
       setPredictions(preds);
-      
+
       // Generate insights
       const ins = generateGlucoseInsights(readings, preds);
       setInsights(ins);
@@ -95,7 +95,7 @@ export const GlucoseTracker: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const fastingNum = fasting ? parseFloat(fasting) : undefined;
     const postMealNum = postMeal ? parseFloat(postMeal) : undefined;
     const hba1cNum = hba1c ? parseFloat(hba1c) : undefined;
@@ -195,17 +195,18 @@ export const GlucoseTracker: React.FC = () => {
 
   const chartData = prepareChartData();
   const lastReading = readings[0];
-  const lastCategory = lastReading 
+  const lastCategory = lastReading
     ? getGlucoseCategory(lastReading.fasting, lastReading.postMeal, lastReading.hba1c)
     : null;
 
   return (
-    <Card className="bg-white dark:bg-gray-800 shadow-md border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
-      <CardHeader className="bg-gradient-to-r from-blue-50 to-white dark:from-blue-900/20 dark:to-gray-800 pb-3">
+    <Card className="glass-panel border-0 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+      <CardHeader className="bg-white/5 border-b border-white/5 pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Droplet className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            <CardTitle className="text-lg text-gray-900 dark:text-gray-100">
+            <Droplet className="w-5 h-5 text-blue-400" />
+            <CardTitle className="text-lg text-foreground">
               AI Glucose Tracker & Predictor
             </CardTitle>
           </div>
@@ -218,22 +219,22 @@ export const GlucoseTracker: React.FC = () => {
             Add Reading
           </Button>
         </div>
-        <CardDescription className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+        <CardDescription className="text-sm text-muted-foreground mt-1">
           Track glucose levels with AI-powered 7-day trend prediction
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-4 space-y-4">
         {/* Entry Form */}
         {showForm && (
-          <Card className="bg-gray-50 dark:bg-gray-700 border-2 border-blue-200 dark:border-blue-800">
+          <Card className="bg-black/20 border border-blue-500/20">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg text-gray-900 dark:text-gray-100">Add Glucose Reading</CardTitle>
+                <CardTitle className="text-lg text-foreground">Add Glucose Reading</CardTitle>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowForm(false)}
-                  className="text-gray-700 dark:text-gray-300"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -243,7 +244,7 @@ export const GlucoseTracker: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                    <label className="text-sm font-medium text-foreground mb-1 block">
                       Fasting Glucose (mg/dL)
                     </label>
                     <Input
@@ -253,11 +254,11 @@ export const GlucoseTracker: React.FC = () => {
                       placeholder="100"
                       min="50"
                       max="500"
-                      className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                      className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                    <label className="text-sm font-medium text-foreground mb-1 block">
                       Post-Meal Glucose (mg/dL)
                     </label>
                     <Input
@@ -267,13 +268,13 @@ export const GlucoseTracker: React.FC = () => {
                       placeholder="140"
                       min="50"
                       max="500"
-                      className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                      className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                    <label className="text-sm font-medium text-foreground mb-1 block">
                       HbA1c (%)
                     </label>
                     <Input
@@ -284,15 +285,15 @@ export const GlucoseTracker: React.FC = () => {
                       min="3"
                       max="15"
                       step="0.1"
-                      className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                      className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                    <label className="text-sm font-medium text-foreground mb-1 block">
                       Meal Type (Optional)
                     </label>
                     <Select value={mealType || ''} onValueChange={(v) => setMealType(v as any)}>
-                      <SelectTrigger className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500">
+                      <SelectTrigger className="bg-black/20 text-foreground border-white/10 focus:border-blue-500 focus:ring-blue-500">
                         <SelectValue placeholder="Select meal type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -305,7 +306,7 @@ export const GlucoseTracker: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 block">
+                  <label className="text-sm font-medium text-foreground mb-1 block">
                     Notes (Optional)
                   </label>
                   <Input
@@ -313,7 +314,7 @@ export const GlucoseTracker: React.FC = () => {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="e.g., After exercise, before meal"
-                    className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                    className="bg-black/20 text-foreground placeholder:text-muted-foreground border-white/10 focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -324,6 +325,7 @@ export const GlucoseTracker: React.FC = () => {
                     type="button"
                     variant="outline"
                     onClick={() => setShowForm(false)}
+                    className="border-white/10 hover:bg-white/5"
                   >
                     Cancel
                   </Button>
@@ -335,39 +337,39 @@ export const GlucoseTracker: React.FC = () => {
 
         {/* Current Reading Display */}
         {lastReading && (
-          <div className="bg-gradient-to-r from-blue-50 to-pink-50 dark:from-blue-900/20 dark:to-pink-900/20 rounded-lg p-4 border-2 border-blue-200 dark:border-blue-800">
+          <div className="bg-gradient-to-r from-blue-500/10 to-pink-500/10 rounded-lg p-4 border border-blue-500/20">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">Latest Reading</div>
+                <div className="text-sm text-muted-foreground mb-1">Latest Reading</div>
                 <div className="flex items-center gap-4">
                   {lastReading.fasting && (
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      <div className="text-2xl font-bold text-foreground">
                         {lastReading.fasting}
-                        <span className="text-lg text-gray-600 dark:text-gray-300 ml-1">mg/dL</span>
+                        <span className="text-lg text-muted-foreground ml-1">mg/dL</span>
                       </div>
-                      <div className="text-xs text-gray-700 dark:text-gray-300 font-medium">Fasting</div>
+                      <div className="text-xs text-muted-foreground font-medium">Fasting</div>
                     </div>
                   )}
                   {lastReading.postMeal && (
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      <div className="text-2xl font-bold text-foreground">
                         {lastReading.postMeal}
-                        <span className="text-lg text-gray-600 dark:text-gray-300 ml-1">mg/dL</span>
+                        <span className="text-lg text-muted-foreground ml-1">mg/dL</span>
                       </div>
-                      <div className="text-xs text-gray-700 dark:text-gray-300 font-medium">Post-Meal</div>
+                      <div className="text-xs text-muted-foreground font-medium">Post-Meal</div>
                     </div>
                   )}
                   {lastReading.hba1c && (
                     <div>
-                      <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      <div className="text-2xl font-bold text-foreground">
                         {lastReading.hba1c}%
-                        <span className="text-lg text-gray-600 dark:text-gray-300 ml-1">HbA1c</span>
+                        <span className="text-lg text-muted-foreground ml-1">HbA1c</span>
                       </div>
                     </div>
                   )}
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-300 mt-2 font-medium">
+                <div className="text-xs text-muted-foreground mt-2 font-medium">
                   {format(parseISO(lastReading.timestamp), 'MMM dd, yyyy HH:mm')}
                 </div>
               </div>
@@ -377,8 +379,8 @@ export const GlucoseTracker: React.FC = () => {
                     lastCategory?.severity === 'critical' || lastCategory?.severity === 'diabetic'
                       ? 'bg-red-600 text-white'
                       : lastCategory?.severity === 'prediabetic'
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-green-600 text-white'
+                        ? 'bg-orange-500 text-white'
+                        : 'bg-green-600 text-white'
                   }
                 >
                   {lastCategory?.category || 'Unknown'}
@@ -390,10 +392,11 @@ export const GlucoseTracker: React.FC = () => {
 
         {/* AI Predictions */}
         {predictions.length > 0 && (
-          <Card className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-2 border-purple-200 dark:border-purple-800">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-purple-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+                <Brain className="w-5 h-5 text-purple-400" />
                 AI 7-Day Prediction
               </CardTitle>
             </CardHeader>
@@ -401,18 +404,18 @@ export const GlucoseTracker: React.FC = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis 
-                    dataKey="date" 
+                  <XAxis
+                    dataKey="date"
                     stroke="#6b7280"
                     tick={{ fill: '#6b7280', fontSize: 12 }}
                   />
-                  <YAxis 
-                    domain={[0, 300]} 
+                  <YAxis
+                    domain={[0, 300]}
                     stroke="#6b7280"
                     tick={{ fill: '#6b7280', fontSize: 12 }}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
+                  <Tooltip
+                    contentStyle={{
                       backgroundColor: 'rgba(255, 255, 255, 0.95)',
                       border: '1px solid #e5e7eb',
                       borderRadius: '0.5rem',
@@ -455,7 +458,7 @@ export const GlucoseTracker: React.FC = () => {
                   />
                 </AreaChart>
               </ResponsiveContainer>
-              
+
               {/* Risk Periods */}
               <div className="mt-4 space-y-2">
                 <div className="text-sm font-semibold text-gray-700 dark:text-gray-200">Predicted Risk Periods:</div>
@@ -480,10 +483,11 @@ export const GlucoseTracker: React.FC = () => {
 
         {/* AI Insights */}
         {insights.length > 0 && (
-          <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 border-2 border-yellow-200 dark:border-yellow-800">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <Lightbulb className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+          <Card className="glass-panel border-0 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1 h-full bg-yellow-500/50"></div>
+            <CardHeader className="bg-white/5 border-b border-white/5">
+              <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+                <Lightbulb className="w-5 h-5 text-yellow-500" />
                 AI Insights & Recommendations
               </CardTitle>
             </CardHeader>
@@ -496,8 +500,8 @@ export const GlucoseTracker: React.FC = () => {
                       insight.severity === 'high'
                         ? 'border-red-500 bg-red-50 dark:bg-red-900/20'
                         : insight.severity === 'moderate'
-                        ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                        : 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                          ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
+                          : 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                     }
                   >
                     <AlertTriangle className="h-4 w-4" />
@@ -528,33 +532,33 @@ export const GlucoseTracker: React.FC = () => {
         {stats && stats.readingCount > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {stats.averageFasting > 0 && (
-              <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-                <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Avg Fasting</div>
-                <div className="text-lg font-bold text-blue-700 dark:text-blue-300">
+              <div className="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+                <div className="text-xs text-blue-200 mb-1 font-medium">Avg Fasting</div>
+                <div className="text-lg font-bold text-blue-400">
                   {stats.averageFasting}
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 font-medium">mg/dL</div>
+                <div className="text-xs text-blue-200/70 mt-1 font-medium">mg/dL</div>
               </div>
             )}
             {stats.averagePostMeal > 0 && (
-              <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3 border border-green-200 dark:border-green-800">
-                <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Avg Post-Meal</div>
-                <div className="text-lg font-bold text-green-700 dark:text-green-300">
+              <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+                <div className="text-xs text-green-200 mb-1 font-medium">Avg Post-Meal</div>
+                <div className="text-lg font-bold text-green-400">
                   {stats.averagePostMeal}
                 </div>
-                <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 font-medium">mg/dL</div>
+                <div className="text-xs text-green-200/70 mt-1 font-medium">mg/dL</div>
               </div>
             )}
-            <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-3 border border-purple-200 dark:border-purple-800">
-              <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">Total Readings</div>
-              <div className="text-lg font-bold text-purple-700 dark:text-purple-300">
+            <div className="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+              <div className="text-xs text-purple-200 mb-1 font-medium">Total Readings</div>
+              <div className="text-lg font-bold text-purple-400">
                 {stats.readingCount}
               </div>
             </div>
             {stats.hba1c && (
-              <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
-                <div className="text-xs text-gray-700 dark:text-gray-300 mb-1 font-medium">HbA1c</div>
-                <div className="text-lg font-bold text-orange-700 dark:text-orange-300">
+              <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+                <div className="text-xs text-orange-200 mb-1 font-medium">HbA1c</div>
+                <div className="text-lg font-bold text-orange-400">
                   {stats.hba1c}%
                 </div>
               </div>
@@ -564,33 +568,33 @@ export const GlucoseTracker: React.FC = () => {
 
         {/* Recent Readings */}
         {readings.length > 0 && (
-          <Card className="bg-white dark:bg-gray-800">
+          <Card className="glass-panel border-0">
             <CardHeader>
-              <CardTitle className="text-lg text-gray-900 dark:text-gray-100">Recent Readings</CardTitle>
+              <CardTitle className="text-lg text-foreground">Recent Readings</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+              <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
                 {readings.slice(0, 10).map((reading) => {
                   const category = getGlucoseCategory(reading.fasting, reading.postMeal, reading.hba1c);
                   return (
                     <div
                       key={reading.id}
-                      className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
+                      className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10"
                     >
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
                           {reading.fasting && (
-                            <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                            <div className="text-lg font-bold text-foreground">
                               F: {reading.fasting}
                             </div>
                           )}
                           {reading.postMeal && (
-                            <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                            <div className="text-lg font-bold text-foreground">
                               PM: {reading.postMeal}
                             </div>
                           )}
                           {reading.hba1c && (
-                            <div className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                            <div className="text-lg font-bold text-foreground">
                               HbA1c: {reading.hba1c}%
                             </div>
                           )}
@@ -599,14 +603,14 @@ export const GlucoseTracker: React.FC = () => {
                               category.severity === 'critical' || category.severity === 'diabetic'
                                 ? 'bg-red-600 text-white'
                                 : category.severity === 'prediabetic'
-                                ? 'bg-orange-500 text-white'
-                                : 'bg-green-600 text-white'
+                                  ? 'bg-orange-500 text-white'
+                                  : 'bg-green-600 text-white'
                             }
                           >
                             {category.category}
                           </Badge>
                         </div>
-                        <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                        <div className="text-xs text-muted-foreground mt-1">
                           {format(parseISO(reading.timestamp), 'MMM dd, yyyy HH:mm')}
                           {reading.mealType && ` • ${reading.mealType}`}
                           {reading.notes && ` • ${reading.notes}`}
@@ -616,7 +620,7 @@ export const GlucoseTracker: React.FC = () => {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(reading.id)}
-                        className="text-red-600 dark:text-red-400 hover:text-red-700"
+                        className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -631,10 +635,10 @@ export const GlucoseTracker: React.FC = () => {
         {/* Empty State */}
         {readings.length === 0 && (
           <div className="text-center py-8 space-y-4">
-            <Droplet className="w-16 h-16 mx-auto text-gray-600 dark:text-gray-400" />
+            <Droplet className="w-16 h-16 mx-auto text-muted-foreground" />
             <div>
-              <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">No glucose readings yet</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-4 font-medium">
+              <h3 className="text-lg font-semibold mb-2 text-foreground">No glucose readings yet</h3>
+              <p className="text-muted-foreground mb-4 font-medium">
                 Start tracking your blood glucose to get AI-powered predictions
               </p>
               <Button
